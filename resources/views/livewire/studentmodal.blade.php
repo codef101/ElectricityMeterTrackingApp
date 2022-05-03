@@ -38,10 +38,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" wire:click="closeModal"
                     aria-label="Close"></button>
             </div>
+
             <form wire:submit.prevent="updateStudent">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label>Student Name</label>
+                        <label>Date</label>
                         <input type="text" wire:model="name" class="form-control">
                         @error('name') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
@@ -62,6 +63,7 @@
                     <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
+            
         </div>
     </div>
 </div>

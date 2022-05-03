@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Imports\ExcelImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\MeterNumber;
+use App\Models\Consumer;
 use DataTables;
 
 class MeterController extends Controller
@@ -69,9 +70,9 @@ class MeterController extends Controller
         $request->validate([
             'Consumer' => 'required'
             ]);
-            $meterNumber = new MeterNumber;
-            $meterNumber->Consumer = $request->Consumer;
-            $meterNumber->save();
+            $Consumer = new Consumer;
+            $Consumer->Consumer = $request->input('Consumer');
+            $Consumer->save();
             return redirect()->route('home')
             ->with('success','Consumer has been created successfully.');
     }
@@ -81,7 +82,7 @@ class MeterController extends Controller
         //
     }
 
-    public function edit(MeterNumber $meternumbers)
+    public function edit(MeterNumber $id)
     {
         return view('edit',compact('meternumbertable'));
     }

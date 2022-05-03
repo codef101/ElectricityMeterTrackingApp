@@ -52,7 +52,7 @@ class MetersTable extends Component
     {
         $validatedData = $this->validate();
 
-        MeterNumber::create($validatedData);
+        Consumer::create($validatedData);
         session()->flash('message','Added Successfully');
         $this->resetInput();
         $this->dispatchBrowserEvent('close-modal');
