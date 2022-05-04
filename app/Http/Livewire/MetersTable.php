@@ -3,6 +3,8 @@
 namespace App\Http\Livewire;
 
 use App\Models\MeterNumber;
+use App\Models\Consumer;
+
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -17,28 +19,28 @@ class MetersTable extends Component
     public $search = '';
 
     //ordering the contents
-    public $orderBy = 'id';
+    public $orderBy = 'MeterID';
     public $orderAsc = true;
 
 
     //updating patch
     //editing functionality ***************************************************
     //updating
-    public $Date, $BuildingName, $Consumer, $MeterNumber, $TotalVolume, $TotalUnits, $PrincipleAmount, $PrincipleAmountExclVat, $VAT, $ArrearsAmount, $TarrifIndex,$row_id;
+    public $Date, $BuildingName, $ConsumerName, $MeterNumber, $TotalVolume, $TotalUnits, $PrincipleAmount, $PrincipleAmountExclVat, $VAT, $ArrearsAmount, $TarrifIndex,$MeterID;
     protected function rules()
     {
         return [
-            'Date' => 'required|string',
-            'BuildingName' => 'required|string',
-            'Consumer' => 'required|string|min:1',
-            'MeterNumber' => 'required|string',
-            'TotalVolume' => 'required|string',
-            'TotalUnits' => 'required|string',
-            'PrincipleAmount' => 'required|string',
-            'PrincipleAmountExclVat' => 'required|string',
-            'VAT' => 'required|string',
-            'ArrearsAmount' => 'required|string',
-            'TarrifIndex' => 'required|string',
+            'Date' => 'string',
+            'BuildingName' => 'string',
+            'ConsumerName' => 'string',
+            'MeterNumber' => 'string',
+            'TotalVolume' => 'string',
+            'TotalUnits' => 'string',
+            'PrincipleAmount' => 'string',
+            'PrincipleAmountExclVat' => 'string',
+            'VAT' => 'string',
+            'ArrearsAmount' => 'string',
+            'TarrifIndex' => 'string',
         ];
     }
 
@@ -50,19 +52,21 @@ class MetersTable extends Component
 
     public function saveStudent()
     {
-        $validatedData = $this->validate();
-
-        Consumer::create($validatedData);
+       
+        Consumer::create([
+            'ConsumerName' => $this->ConsumerName,
+        ]);
+        
         session()->flash('message','Added Successfully');
         $this->resetInput();
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function editStudent(int $row_id)
+    public function editStudent(int $MeterID)
     {
-        $student = MeterNumber::find($row_id);
+        $student = MeterNumber::find($MeterID);
         if($student){
-            $this->row_id = $student->id;
+            $this->MeterID = $student->MeterID;
             $this->Date = $student->Date;
             $this->BuildingName = $student->BuildingName;
             $this->Consumer = $student->Consumer;
@@ -101,16 +105,17 @@ class MetersTable extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function deleteStudent(int $row_id)
+    public function deleteStudent(int $MeterID)
     {
-        $this->id = $row_id;
+        $this->id = $MeterID;
     }
 
     public function destroyStudent()
     {
-        MeterNumber::find($this->id)->delete();
+        
+        MeterNumber::find($this -> $MeterID)->delete();
+
         session()->flash('message','Deleted Successfully');
-        $this->dispatchBrowserEvent('close-modal');
     }
 
     public function closeModal()

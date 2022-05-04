@@ -19,7 +19,7 @@
                 <option value="ArrearsAmount">Arrears Amount</option>
                 <option value="TarrifIndex">Tarrif Index</option>
             </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex MeterNumbers-center px-2 text-gray-700">
                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
             </div>
         </div>
@@ -28,7 +28,7 @@
                 <option value="1">Ascending</option>
                 <option value="0">Descending</option>
             </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex MeterNumbers-center px-2 text-gray-700">
                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
             </div>
         </div>
@@ -40,14 +40,14 @@
                 <option>50</option>
                 <option>100</option>
             </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex MeterNumbers-center px-2 text-gray-700">
                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
             </div>
         </div>
     </div>
     <table class="table-auto w-full mb-6">
         <thead>
-            <tr>                        <th class="px-4 py-2">id</th>
+            <tr>                        <th class="px-4 py-2">Meter ID</th>
                                         <th class="px-4 py-2">Date</th>
                                         <th class="px-4 py-2">Building Name</th>
                                         <th class="px-4 py-2">Consumer Name</th>
@@ -63,25 +63,25 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($meterNumbers as $item)
+            @foreach($meterNumbers as $MeterNumber)
                 <tr>
-                                        <td class="border px-4 py-2">{{ $item->id }}</td>
-                                        <td class="border px-4 py-2">{{ $item->Date }}</td>
-                                        <td class="border px-4 py-2">{{ $item->BuildingName }}</td>
-                                        <td class="border px-4 py-2">{{ $item->Consumer }}</td>
-                                        <td class="border px-4 py-2">{{ $item->MeterNumber }}</td>
-                                        <td class="border px-4 py-2">{{ $item->TotalVolume }}</td>
-                                        <td class="border px-4 py-2">{{ $item->TotalUnits }}</td>
-                                        <td class="border px-4 py-2">{{ $item->PrincipleAmount }}</td>
-                                        <td class="border px-4 py-2">{{ $item->PrincipleAmountExclVat }}</td>
-                                        <td class="border px-4 py-2">{{ $item->VAT }}</td>
-                                        <td class="border px-4 py-2">{{ $item->ArrearsAmount }}</td>
-                                        <td class="border px-4 py-2">{{ $item->TarrifIndex }}</td>
+                                        <td class="border px-4 py-2">{{ $MeterNumber->MeterID }}</td>
+                                        <td class="border px-4 py-2">{{ $MeterNumber->Date }}</td>
+                                        <td class="border px-4 py-2">{{ $MeterNumber->BuildingName }}</td>
+                                        <td class="border px-4 py-2">{{ $MeterNumber->ConsumerName }}</td>
+                                        <td class="border px-4 py-2">{{ $MeterNumber->MeterNumber }}</td>
+                                        <td class="border px-4 py-2">{{ $MeterNumber->TotalVolume }}</td>
+                                        <td class="border px-4 py-2">{{ $MeterNumber->TotalUnits }}</td>
+                                        <td class="border px-4 py-2">{{ $MeterNumber->PrincipleAmount }}</td>
+                                        <td class="border px-4 py-2">{{ $MeterNumber->PrincipleAmountExclVat }}</td>
+                                        <td class="border px-4 py-2">{{ $MeterNumber->VAT }}</td>
+                                        <td class="border px-4 py-2">{{ $MeterNumber->ArrearsAmount }}</td>
+                                        <td class="border px-4 py-2">{{ $MeterNumber->TarrifIndex }}</td>
                                         
                                         <td class="border px-4 py-2">
-                                            <button type="button" data-bs-toggle="modal" data-bs-target="#updateStudentModal" wire:click="editStudent({{$item->id}})" class="btn btn-primary">Edit</button>
+                                            <button type="button" data-bs-toggle="modal" data-bs-target="#updateStudentModal" wire:click="editStudent({{ $MeterNumber->MeterID }})" class="btn btn-primary">Edit</button>
                                             
-                                            <button type="button" data-bs-toggle="modal" data-bs-target="#deleteStudentModal" wire:click="deleteStudent({{$item->id}})" class="btn btn-danger"> Delete</button>
+                                            <button type="button" data-bs-toggle="modal" data-bs-target="#deleteStudentModal" wire:click="deleteStudent({{ $MeterNumber->MeterID }})" class="btn btn-danger"> Delete</button>
                                             
                                         </td>
                                         

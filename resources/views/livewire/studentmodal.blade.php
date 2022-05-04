@@ -8,21 +8,25 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                     wire:click="closeModal"></button>
             </div>
+
             <form wire:submit.prevent="saveStudent">
                 <div class="modal-body">
-                    <div class="mb-3">
+                    
+                <div class="mb-3">
                         <label>Consumer Name</label>
-                        <input type="text" wire:model="Consumer" class="form-control">
-                        @error('Consumer') <span class="text-danger">{{ $message }}</span> @enderror
+                        <input type="text" wire:model="ConsumerName" class="form-control">
                     </div>
                     
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" wire:click="closeModal"
                         data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
+                
             </form>
+
         </div>
     </div>
 </div>
@@ -39,7 +43,7 @@
                     aria-label="Close"></button>
             </div>
 
-            <form wire:submit.prevent="updateStudent">
+            <form wire:submit.prevent="update">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label>Date</label>
@@ -63,7 +67,7 @@
                     <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
-            
+
         </div>
     </div>
 </div>

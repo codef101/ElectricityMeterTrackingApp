@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MeterController;
+use App\Http\Livewire\MetersTable;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,7 +14,7 @@ use App\Http\Controllers\MeterController;
 |
 */
 
-Route::get('/', function () {
+Route::get('/',MetersTable::class, function () {
     return view('welcome');
 });
 
@@ -26,13 +27,12 @@ Route::POST('/excel-import', [App\Http\Controllers\MeterController::class, 'impo
 
 //This route gives access to all functions within the controller class
 Route::resource('meternumbertable', App\Http\Controllers\MeterController::class);
+Route::resource('consumertable', App\Http\Controllers\MeterController::class);
 
 
 Route::post('deleterow', [MeterController::class,'destroy'])->name('deleterow');
 /*Route::get('/create', [App\Http\Controllers\MeterController::class, 'create'])->name('create');
 Route::POST('/store', [App\Http\Controllers\MeterController::class, 'store'])->name('store');*/
-
-//livewire
 
 
 

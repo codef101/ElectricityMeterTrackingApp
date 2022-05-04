@@ -17,8 +17,8 @@ class MeterNumber extends Model
      */
 
     protected $table = "meternumbertable";
-    protected $primaryKey = 'MeterNumber';
-    protected $fillable = ['Date','BuildingName','Consumer','MeterNumber','TotalVolume','TotalUnits','PrincipleAmount','PrincipleAmountExclVat','VAT','ArrearsAmount','TarrifIndex','updated_at'];
+    protected $primaryKey = 'MeterID';
+    protected $fillable = ['MeterID','Date','BuildingName','ConsumerName','MeterNumber','TotalVolume','TotalUnits','PrincipleAmount','PrincipleAmountExclVat','VAT','ArrearsAmount','TarrifIndex','updated_at'];
 
     protected $guarded = [];
 
@@ -29,7 +29,7 @@ class MeterNumber extends Model
             : static::query()->where('id','like','%'.$search.'%')
                 ->orWhere('Date','like','%'.$search.'%')
                 ->orWhere('BuildingName','like','%'.$search.'%')
-                ->orWhere('Consumer','like','%'.$search.'%')
+                ->orWhere('ConsumerName','like','%'.$search.'%')
                 ->orWhere('MeterNumber','like','%'.$search.'%');
     }
 }
