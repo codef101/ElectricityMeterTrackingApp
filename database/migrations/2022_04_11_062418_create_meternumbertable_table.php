@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('meternumbertable', function (Blueprint $table) {
-            $table->increments("id");
+            $table->increments("MeterID");
             $table->string("Date");
             $table->string("BuildingName");
             $table->string("Consumer");
@@ -27,6 +27,11 @@ return new class extends Migration
             $table->string("ArrearsAmount");
             $table->string("TarrifIndex");
         });
+
+        Schema::create('consumertable', function (Blueprint $table) {
+            $table->increments("id");
+            $table->string("ConsumerName");
+        });
     }
 
     /**
@@ -37,5 +42,6 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('meternumbertable');
+        Schema::dropIfExists('consumertable');
     }
 };

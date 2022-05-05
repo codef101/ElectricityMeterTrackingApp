@@ -37,8 +37,9 @@ class MeterController extends Controller
     */
     public function import(Request $request) 
     {
+        MeterNumber::truncate();
         Excel::import(new ExcelImport,request()->file('file'));
-               
+        
         return back()->with('status', 'The file has been imported');
     }
 

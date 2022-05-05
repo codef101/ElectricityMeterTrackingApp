@@ -7,6 +7,7 @@ use App\Models\Consumer;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use DB;
 
 class MetersTable extends Component
 {
@@ -27,6 +28,22 @@ class MetersTable extends Component
     //editing functionality ***************************************************
     //updating
     public $Date, $BuildingName, $ConsumerName, $MeterNumber, $TotalVolume, $TotalUnits, $PrincipleAmount, $PrincipleAmountExclVat, $VAT, $ArrearsAmount, $TarrifIndex,$MeterID;
+    
+    //*******************The dropdown */
+    public $selectedConsumer = NULL;
+    public function mount()
+    {
+        $this->states = State::all();
+        $this->cities = collect();
+    }
+    public function updatedSelectedConsumer($Consumer)
+    {
+        if (!is_null($state)) {
+            $this->cities = City::where('state_id', $state)->get();
+        }
+    }
+    //*****************DropDown End */
+
     protected function rules()
     {
         return [
@@ -69,7 +86,7 @@ class MetersTable extends Component
             $this->MeterID = $student->MeterID;
             $this->Date = $student->Date;
             $this->BuildingName = $student->BuildingName;
-            $this->Consumer = $student->Consumer;
+            $this->ConsumerName = $student->ConsumerName;
             $this->MeterNumber = $student->MeterNumber;
             $this->TotalVolume = $student->TotalVolume;
             $this->TotalUnits = $student->TotalUnits;
@@ -83,22 +100,22 @@ class MetersTable extends Component
         }
     }
 
-    public function updateStudent()
+    public function update()
     {
-        $validatedData = $this->validate();
+        //$validatedData = $this->validate();
 
-        MeterNumber::where('id',$this->row_id)->update([
-            'Date' => $validatedData['Date'],
-            'BuildingName' => $validatedData['BuildingName'],
-            'Consumer' => $validatedData['Consumer'],
-            'MeterNumber' => $validatedData['MeterNumber'],
-            'TotalVolume' => $validatedData['TotalVolume'],
-            'TotalUnits' => $validatedData['TotalUnits'],
-            'PrincipleAmount' => $validatedData['PrincipleAmount'],
-            'PrincipleAmountExclVat' => $validatedData['PrincipleAmountExclVat'],
-            'VAT' => $validatedData['VAT'],
-            'ArrearsAmount' => $validatedData['ArrearsAmount'],
-            'TarrifIndex' => $validatedData['TarrifIndex']
+        MeterNumber::where('MeterID',$this->MeterID)->update([
+            'Date' => $this->Date,
+            'BuildingName' => $this->BuildingName,
+            'ConsumerName' => $this->ConsumerName,
+            'MeterNumber' => $this->MeterNumber,
+            'TotalVolume' => $this->TotalVolume,
+            'TotalUnits' => $this->TotalUnits,
+            'PrincipleAmount' =>$this->PrincipleAmount,
+            'PrincipleAmountExclVat' => $this->PrincipleAmountExclVat,
+            'VAT' => $this->VAT,
+            'ArrearsAmount' => $this->ArrearsAmount,
+            'TarrifIndex' => $this->TarrifIndex
         ]);
         session()->flash('message',' Updated Successfully');
         $this->resetInput();
@@ -107,17 +124,15 @@ class MetersTable extends Component
 
     public function deleteStudent(int $MeterID)
     {
-        $this->id = $MeterID;
+        $this->MeterID = $MeterID;
     }
 
     public function destroyStudent()
     {
-        
-        MeterNumber::find($this -> $MeterID)->delete();
-
+        MeterNumber::find($this->MeterID)->delete();
         session()->flash('message','Deleted Successfully');
     }
-
+    
     public function closeModal()
     {
         $this->resetInput();

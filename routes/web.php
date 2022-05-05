@@ -14,7 +14,7 @@ use App\Http\Livewire\MetersTable;
 |
 */
 
-Route::get('/',MetersTable::class, function () {
+Route::get('/home', MetersTable::class, function () {
     return view('welcome');
 });
 
