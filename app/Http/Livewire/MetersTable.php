@@ -30,19 +30,18 @@ class MetersTable extends Component
     public $Date, $BuildingName, $ConsumerName, $MeterNumber, $TotalVolume, $TotalUnits, $PrincipleAmount, $PrincipleAmountExclVat, $VAT, $ArrearsAmount, $TarrifIndex,$MeterID;
     
     //*******************The dropdown */
-    public $selectedConsumer = NULL;
-    public function mount()
+    public function dropDownShow(Request $request)
+
     {
-        $this->states = State::all();
-        $this->cities = collect();
+    
+       $items = Consumer::pluck('ConsumerName', 'id');
+    
+       $selectedID = 2;
+    
+       return view('home', compact('id', 'items'));
+    
     }
-    public function updatedSelectedConsumer($Consumer)
-    {
-        if (!is_null($state)) {
-            $this->cities = City::where('state_id', $state)->get();
-        }
-    }
-    //*****************DropDown End */
+    //*****************DropDown */
 
     protected function rules()
     {

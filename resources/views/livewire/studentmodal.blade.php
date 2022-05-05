@@ -56,9 +56,12 @@
                         <input type="text" wire:model="BuildingName" class="form-control">
                         @error('email') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
+
+                    <!--DROP DOWN-->
                     <div class="mb-3">
                         <label>Consumer</label>
-                        <input type="text" wire:model="ConsumerName" class="form-control">
+                        
+                        <!--<input type="text" wire:model="ConsumerName" class="form-control">-->
                         @error('course') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                     <div class="mb-3">

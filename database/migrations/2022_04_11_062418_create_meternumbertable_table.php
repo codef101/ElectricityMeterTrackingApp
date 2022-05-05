@@ -17,7 +17,7 @@ return new class extends Migration
             $table->increments("MeterID");
             $table->string("Date");
             $table->string("BuildingName");
-            $table->string("Consumer");
+            $table->string("ConsumerName");
             $table->string("MeterNumber");
             $table->string("TotalVolume");
             $table->string("TotalUnits");
@@ -28,10 +28,6 @@ return new class extends Migration
             $table->string("TarrifIndex");
         });
 
-        Schema::create('consumertable', function (Blueprint $table) {
-            $table->increments("id");
-            $table->string("ConsumerName");
-        });
     }
 
     /**
@@ -42,6 +38,5 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('meternumbertable');
-        Schema::dropIfExists('consumertable');
     }
 };
