@@ -27,19 +27,14 @@ class MetersTable extends Component
     //updating patch
     //editing functionality ***************************************************
     //updating
-    public $Date, $BuildingName, $ConsumerName, $MeterNumber, $TotalVolume, $TotalUnits, $PrincipleAmount, $PrincipleAmountExclVat, $VAT, $ArrearsAmount, $TarrifIndex,$MeterID;
+    public $ConsumerID ,$consumers,$Date, $BuildingName, $ConsumerName, $MeterNumber, $TotalVolume, $TotalUnits, $PrincipleAmount, $PrincipleAmountExclVat, $VAT, $ArrearsAmount, $TarrifIndex,$MeterID;
     
     //*******************The dropdown */
-    public function dropDownShow(Request $request)
-
+    public function dropDown()
     {
-    
-       $items = Consumer::pluck('ConsumerName', 'id');
-    
-       $selectedID = 2;
-    
-       return view('home', compact('id', 'items'));
-    
+        $consumers = Consumer::orderBy('ConsumerName','desc')->get();
+        return view('home')
+            ->with('consumers',$consumers);
     }
     //*****************DropDown */
 
@@ -156,11 +151,12 @@ class MetersTable extends Component
 
     public function render()
     {
-        //passing a parameter to the view via the controller
+        //passing a parameter for the for table for loop to the view via the controller
         return view('livewire.meters-table',[
             'meterNumbers' =>  MeterNumber::search($this->search)
                 ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
                 ->simplePaginate($this->perPage),
         ]);
+
     }
 }

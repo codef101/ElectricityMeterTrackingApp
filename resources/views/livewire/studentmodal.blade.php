@@ -31,7 +31,6 @@
     </div>
 </div>
 
-
 <!-- Update Student Modal -->
 <div wire:ignore.self class="modal fade" id="updateStudentModal" tabindex="-1" aria-labelledby="updateStudentModalLabel"
     aria-hidden="true">
@@ -60,10 +59,17 @@
                     <!--DROP DOWN-->
                     <div class="mb-3">
                         <label>Consumer</label>
-                        
+                        <select wire:model="ConsumerName" name="dropDown">
+                            <!--Making drop down dynamic-->
+                            @foreach ($consumers as $item)
+                            <option value="{{ $item->id }}" >{{ $item->ConsumerName }}</option>
+                            @endforeach
+
+                        </select>
                         <!--<input type="text" wire:model="ConsumerName" class="form-control">-->
                         @error('course') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
+
                     <div class="mb-3">
                         <label>Meter Number</label>
                         <input type="text" wire:model="MeterNumber" class="form-control">

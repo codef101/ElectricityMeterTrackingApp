@@ -47,43 +47,45 @@
     </div>
     <table class="table-auto w-full mb-6">
         <thead>
-            <tr>                        <th class="px-4 py-2">Meter ID</th>
-                                        <th class="px-4 py-2">Date</th>
-                                        <th class="px-4 py-2">Building Name</th>
-                                        <th class="px-4 py-2">Consumer Name</th>
-                                        <th class="px-4 py-2">Meter Number</th>
-                                        <th class="px-4 py-2">Total Volume</th>
-                                        <th class="px-4 py-2">Total Units</th>
-                                        <th class="px-4 py-2">Principle Amount</th>
-                                        <th class="px-4 py-2">Amt Excl Vat</th>
-                                        <th class="px-4 py-2">VAT</th>
-                                        <th class="px-4 py-2">Arrears Amount</th>
-                                        <th class="px-4 py-2">Tarriff Index</th>
-                                        <th class="px-4 py-2">Actions</th>
+            <tr>                 
+                <th class="px-4 py-2">Meter ID</th>
+                <th class="px-4 py-2">Date</th>
+                <th class="px-4 py-2">Building Name</th>
+                <th class="px-4 py-2">Consumer Name</th>
+                <th class="px-4 py-2">Meter Number</th>
+                <th class="px-4 py-2">Total Volume</th>
+                <th class="px-4 py-2">Total Units</th>
+                <th class="px-4 py-2">Principle Amount</th>
+                <th class="px-4 py-2">Amt Excl Vat</th>
+                <th class="px-4 py-2">VAT</th>
+                <th class="px-4 py-2">Arrears Amount</th>
+                <th class="px-4 py-2">Tarriff Index</th>
+                <th class="px-4 py-2">Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach($meterNumbers as $MeterNumber)
                 <tr>
-                                        <td class="border px-4 py-2">{{ $MeterNumber->MeterID }}</td>
-                                        <td class="border px-4 py-2">{{ $MeterNumber->Date }}</td>
-                                        <td class="border px-4 py-2">{{ $MeterNumber->BuildingName }}</td>
-                                        <td class="border px-4 py-2">{{ $MeterNumber->ConsumerName }}</td>
-                                        <td class="border px-4 py-2">{{ $MeterNumber->MeterNumber }}</td>
-                                        <td class="border px-4 py-2">{{ $MeterNumber->TotalVolume }}</td>
-                                        <td class="border px-4 py-2">{{ $MeterNumber->TotalUnits }}</td>
-                                        <td class="border px-4 py-2">{{ $MeterNumber->PrincipleAmount }}</td>
-                                        <td class="border px-4 py-2">{{ $MeterNumber->PrincipleAmountExclVat }}</td>
-                                        <td class="border px-4 py-2">{{ $MeterNumber->VAT }}</td>
-                                        <td class="border px-4 py-2">{{ $MeterNumber->ArrearsAmount }}</td>
-                                        <td class="border px-4 py-2">{{ $MeterNumber->TarrifIndex }}</td>
-                                        
-                                        <td class="border px-4 py-2">
-                                            <button type="button" data-bs-toggle="modal" data-bs-target="#updateStudentModal" wire:click="editStudent({{ $MeterNumber->MeterID }})" class="btn btn-primary">Edit</button>
-                                            
-                                            <button type="button" data-bs-toggle="modal" data-bs-target="#deleteStudentModal" wire:click="deleteStudent({{ $MeterNumber->MeterID }})" class="btn btn-danger"> Delete</button>
-                                            
-                                        </td>
+                    <td class="border px-4 py-2">{{ $MeterNumber->MeterID }}</td>
+                    <td class="border px-4 py-2">{{ $MeterNumber->Date }}</td>
+                    <td class="border px-4 py-2">{{ $MeterNumber->BuildingName }}</td>
+                    <td class="border px-4 py-2">{{ $MeterNumber->ConsumerName }}</td>
+                    <td class="border px-4 py-2">{{ $MeterNumber->MeterNumber }}</td>
+                    <td class="border px-4 py-2">{{ $MeterNumber->TotalVolume }}</td>
+                    <td class="border px-4 py-2">{{ $MeterNumber->TotalUnits }}</td>
+                    <td class="border px-4 py-2">{{ $MeterNumber->PrincipleAmount }}</td>
+                    <td class="border px-4 py-2">{{ $MeterNumber->PrincipleAmountExclVat }}</td>
+                    <td class="border px-4 py-2">{{ $MeterNumber->VAT }}</td>
+                    <td class="border px-4 py-2">{{ $MeterNumber->ArrearsAmount }}</td>
+                    <td class="border px-4 py-2">{{ $MeterNumber->TarrifIndex }}</td>
+                    
+                    <td class="border px-4 py-2">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#updateStudentModal" wire:click="editStudent({{ $MeterNumber->MeterID }})" class="btn btn-primary">Edit</button>
+                        
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#deleteStudentModal" wire:click="deleteStudent({{ $MeterNumber->MeterID }})" class="btn btn-danger"> Delete</button>
+                        
+                        <button type="button" wire:click="deleteStudent({{ $MeterNumber->MeterID }})" class="btn btn-secondary"> Download Invoice</button>
+                    </td>
                                         
                 </tr>
             @endforeach

@@ -14,10 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('meternumbertable', function (Blueprint $table) {
-            $table->increments("MeterID");
+            $table->increments("id");
             $table->string("Date");
             $table->string("BuildingName");
-            $table->string("ConsumerName");
+            $table->string("Consumer");
             $table->string("MeterNumber");
             $table->string("TotalVolume");
             $table->string("TotalUnits");
@@ -27,7 +27,6 @@ return new class extends Migration
             $table->string("ArrearsAmount");
             $table->string("TarrifIndex");
         });
-
     }
 
     /**
