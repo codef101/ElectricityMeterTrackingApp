@@ -27,9 +27,14 @@
                             <br>
                             <button class="btn btn-success">Import User Data</button>
 
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#studentModal" >Add New Consumer</button>
+                            
                         </form>
-                        
+                        <br>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#studentModal" >Add New Consumer</button>
+
+                            <button type="button" class="btn btn-success" onclick="window.location='{{ url("invoice") }}'" target="_blank"  >View Current PDF Invoice</button>
+
+                            <button type="button" class="btn btn-warning" onclick="window.location='{{ url("csv-export") }}'"  >Export CSV</button>
         <h1 class="text-3xl text-center my-10">Meters Table</h1>
         <livewire:meters-table>
     </div>

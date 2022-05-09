@@ -33,8 +33,9 @@ class MetersTable extends Component
     public function dropDown()
     {
         $consumers = Consumer::orderBy('ConsumerName','desc')->get();
+        
         return view('home')
-            ->with('consumers',$consumers);
+            ->with(['consumers'],$consumers);
     }
     //*****************DropDown */
 

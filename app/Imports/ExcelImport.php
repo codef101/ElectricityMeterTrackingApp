@@ -15,7 +15,7 @@ class ExcelImport implements ToModel,  WithStartRow, WithCustomCsvSettings
 {
     public function startRow(): int
     {
-        return 2;
+        return 3;
     }
 
     public function getCsvSettings(): array

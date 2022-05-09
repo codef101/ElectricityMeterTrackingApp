@@ -59,14 +59,8 @@
                     <!--DROP DOWN-->
                     <div class="mb-3">
                         <label>Consumer</label>
-                        <select wire:model="ConsumerName" name="dropDown">
-                            <!--Making drop down dynamic-->
-                            @foreach ($consumers as $item)
-                            <option value="{{ $item->id }}" >{{ $item->ConsumerName }}</option>
-                            @endforeach
-
-                        </select>
-                        <!--<input type="text" wire:model="ConsumerName" class="form-control">-->
+                        
+                        <input type="text" wire:model="ConsumerName" class="form-control">
                         @error('course') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
 

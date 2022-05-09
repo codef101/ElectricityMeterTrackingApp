@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Imports\ExcelImport;
+use App\Exports\CsvExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\MeterNumber;
 use App\Models\Consumer;
 use DataTables;
+use DB;
 
 class MeterController extends Controller
 {
@@ -39,9 +41,27 @@ class MeterController extends Controller
     {
         MeterNumber::truncate();
         Excel::import(new ExcelImport,request()->file('file'));
-        
+        //MeterNumber::select("UPDATE meternumbertable SET ConsumerName = 'UNALLOCATED' WHERE ConsumerName = NULL;")
+ 
+            //replacing NULLS with UNALLOCATED
+                    DB::table('meternumbertable')
+              ->whereNull('ConsumerName')
+              ->update(['ConsumerName' => "UNALLOCATED"]);
+
+              //DELETE EMPTY ROWS
+        DB::table('meternumbertable')->where('BuildingName', '=', null)->delete();
+
         return back()->with('status', 'The file has been imported');
     }
+
+    /**
+    * @return \Illuminate\Support\Collection
+    */
+    public function export() 
+    {
+        return Excel::download(new CsvExport, 'CSV.xlsx');
+    }
+       
 
     /**
      * Show the form for creating a new resource.
