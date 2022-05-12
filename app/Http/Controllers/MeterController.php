@@ -32,8 +32,16 @@ class MeterController extends Controller
 
         $meternumbers = MeterNumber::get();
         return view('home',compact('home'));
-    }
 
+        
+    }
+    public $ConsumerID ,$consumers,$Date, $BuildingName, $ConsumerName, $MeterNumber, $TotalVolume, $TotalUnits, $PrincipleAmount, $PrincipleAmountExclVat, $VAT, $ArrearsAmount, $TarrifIndex,$MeterID;
+    
+    //*******************The dropdown */
+    public function dropDown()
+    {
+        
+    }
     /**
     * @return \Illuminate\Support\Collection
     */

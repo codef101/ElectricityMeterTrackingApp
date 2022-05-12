@@ -20,5 +20,4 @@ class Consumer extends Model
     protected $fillable = ['ConsumerName'];
 
     protected $guarded = [];
-
 }

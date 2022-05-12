@@ -5,8 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use LaravelDaily\Invoices\Invoice;
 use LaravelDaily\Invoices\Classes\Buyer;
-use LaravelDaily\Invoices\Classes\InvoiceItem;
 use LaravelDaily\Invoices\Classes\NumberFormatter;
+use LaravelDaily\Invoices\Classes\Party;
+use LaravelDaily\Invoices\Classes\InvoiceItem;
+use App\Models\MeterNumber;
+use DB;
+
+
 class InvoiceController extends Controller
 {
     
@@ -17,22 +22,73 @@ class InvoiceController extends Controller
      */
     public function show()
     {
-        //invoice controller
-        $customer = new Buyer([
-            'name'          => 'John Doe',
+        $client = new Party([
+            'name'          => 'Electricity Suppliers',
+            'phone'         => 'xxx xxx xxxx',
             'custom_fields' => [
-                'email' => 'test@example.com',
+                'Title' => 'Some info',
+                'Title' => 'Some info',
             ],
         ]);
 
-        $item = (new InvoiceItem())->title('Service 1')->pricePerUnit(2);
+        $customer = new Party([
+            'name'          => 'Estates',
+            'address'       => 'address',
+            'title'          => 'some info',
+            'custom_fields' => [
+                'title' => 'some info',
+            ],
+        ]);
 
-        $invoice = Invoice::make()
+        $Estates = MeterNumber::all();
+        foreach($Estates as $estate){
+            $items []= 
+            (new InvoiceItem())
+                ->title('Consumer Name : '.$estate->ConsumerName)
+                ->description('Meter Number : '.$estate->MeterNumber.' |  Building Name : '.$estate->BuildingName)
+                ->pricePerUnit($estate->PrincipleAmountExclVat)
+                ->tax($estate->VAT)
+                ->quantity(1)
+            ;
+        }
+
+        $notes = [
+            'your multiline',
+            'additional notes',
+            'in regards of payments or something else',
+        ];
+        $notes = implode("<br>", $notes);
+
+        $invoice = Invoice::make('invoice')
+            ->series('BIG')
+            // ability to include translated invoice status
+            // in case it was paid
+            ->status(__('invoices::invoice.paid'))
+            ->sequence(667)
+            ->serialNumberFormat('{SEQUENCE}/{SERIES}')
+            ->seller($client)
             ->buyer($customer)
-            ->discountByPercent(0)
-            ->taxRate(15)
-            ->addItem($item);
+            ->date(now()->subWeeks(3))
+            ->dateFormat('m/d/Y')
+            ->payUntilDays(14)
+            ->currencySymbol('R')
+            ->currencyCode('Rands')
+            ->currencyFormat('{SYMBOL}{VALUE}')
+            ->currencyThousandsSeparator('.')
+            ->currencyDecimalPoint(',')
+            ->filename($client->name . ' ' . $customer->name)
 
+            ->addItems($items)
+
+            ->notes($notes)
+            ->logo(public_path('\sptlogo-removebg-preview.png'))
+            // You can additionally save generated invoice to configured disk
+            ->save('public');
+
+        $link = $invoice->url();
+        // Then send email to party with link
+
+        // And return invoice itself to browser or have a different view
         return $invoice->stream();
     }
 

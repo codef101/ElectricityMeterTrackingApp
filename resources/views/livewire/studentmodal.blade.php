@@ -59,8 +59,13 @@
                     <!--DROP DOWN-->
                     <div class="mb-3">
                         <label>Consumer</label>
-                        
-                        <input type="text" wire:model="ConsumerName" class="form-control">
+                        <select wire:model="ConsumerName" class="form-control">
+                            <option>---Choose a consumer from the drop down---</option>
+                            
+                            <option>1</option>
+
+                        </select>
+                        <!--<input type="text" wire:model="ConsumerName" class="form-control">-->
                         @error('course') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
 
