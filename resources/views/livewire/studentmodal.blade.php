@@ -61,9 +61,9 @@
                         <label>Consumer</label>
                         <select wire:model="ConsumerName" class="form-control">
                             <option>---Choose a consumer from the drop down---</option>
-                            
-                            <option>1</option>
-
+                            @foreach($consumerPointer as $item)
+                            <option>{{$consumerPointer->ConsumerName}}</option>
+                            @endforeach
                         </select>
                         <!--<input type="text" wire:model="ConsumerName" class="form-control">-->
                         @error('course') <span class="text-danger">{{ $message }}</span> @enderror

@@ -157,21 +157,23 @@ class MetersTable extends Component
 
     public function render()
     {
+        $this->consumerPointer=Consumer::get();
+        
         //passing a parameter for the for table for loop to the view via the controller
         return view('livewire.meters-table',[
             'meterNumbers' =>  MeterNumber::search($this->search)
                 ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
                 ->simplePaginate($this->perPage),
-        ]);
 
-        $consumers = Consumer::all();
+               
+        ]);
 
         //$consumers = DB::table('consumertable')
         //->select('ConsumerName')
         //->get();
         
         return view('livewire.meters-table',[
-            'consumerPointer' => Consumer::all(),
+            consumerPointer => Consumer::all(),
         ]);
     }
 }
