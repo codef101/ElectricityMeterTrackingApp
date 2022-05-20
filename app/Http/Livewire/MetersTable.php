@@ -4,7 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\MeterNumber;
 use App\Models\Consumer;
-
+use App\Http\Controllers\InvoiceController;
 use Livewire\Component;
 use Livewire\WithPagination;
 use DB;
@@ -69,7 +69,7 @@ class MetersTable extends Component
 
     public function saveStudent()
     {
-       
+       //dd($request->all());
         Consumer::create([
             'ConsumerName' => $this->ConsumerName,
         ]);
@@ -122,6 +122,7 @@ class MetersTable extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
+
     public function deleteStudent(int $MeterID)
     {
         $this->MeterID = $MeterID;
@@ -164,16 +165,6 @@ class MetersTable extends Component
             'meterNumbers' =>  MeterNumber::search($this->search)
                 ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
                 ->simplePaginate($this->perPage),
-
-               
-        ]);
-
-        //$consumers = DB::table('consumertable')
-        //->select('ConsumerName')
-        //->get();
-        
-        return view('livewire.meters-table',[
-            consumerPointer => Consumer::all(),
         ]);
     }
 }

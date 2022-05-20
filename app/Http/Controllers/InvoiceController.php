@@ -9,14 +9,96 @@ use LaravelDaily\Invoices\Classes\NumberFormatter;
 use LaravelDaily\Invoices\Classes\Party;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
 use App\Models\MeterNumber;
+use App\Models\Consumer;
 use DB;
 
 
 class InvoiceController extends Controller
 {
-    
+    public $MeterID,$Date,$ConsumerName;
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource. FOR SPECIFIC INVOICES
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showSpecificInvoice(Request $MeterID)
+    {
+        $SpecificRow = MeterNumber::find($MeterID);
+
+        $client = new Party([
+            'name'          => 'Electricity Suppliers',
+            'phone'         => 'x4x xxx xxxx',
+            'custom_fields' => [
+                'Title' => 'Some info',
+                'Title' => 'Some info',
+            ],
+        ]);
+    
+        $customer = new Party([
+            'name'          => $SpecificRow->ConsumerName.' End Consumer',
+            'address'       => $SpecificRow->BuildingName,
+            'title'          => 'some info',
+            'custom_fields' => [
+                'title' => 'some info',
+            ],
+        ]);
+        
+        
+        $estate = MeterNumber::all();
+        
+        $items []= 
+            (new InvoiceItem())
+                ->title('Consumer Name : ')
+                ->description('Meter Number : ')
+                ->pricePerUnit(656)
+                ->tax(56)
+                ->quantity(1)
+            ;
+        
+
+        $notes = [
+            'your multiline',
+            'additional notes',
+            'in regards of payments or something else',
+        ];
+        $notes = implode("<br>", $notes);
+
+        $invoice = Invoice::make('invoice')
+            ->series('BIG')
+            // ability to include translated invoice status
+            // in case it was paid
+            ->status(__('invoices::invoice.paid'))
+            ->sequence(667)
+            ->serialNumberFormat('{SEQUENCE}/{SERIES}')
+            ->seller($client)
+            ->buyer($customer)
+            ->date(now()->subWeeks(3))
+            ->dateFormat('m/d/Y')
+            ->payUntilDays(14)
+            ->currencySymbol('R')
+            ->currencyCode('Rands')
+            ->currencyFormat('{SYMBOL}{VALUE}')
+            ->currencyThousandsSeparator('.')
+            ->currencyDecimalPoint(',')
+            ->filename($client->name . ' ' . $customer->name)
+
+            ->addItems($items)
+
+            ->notes($notes)
+            ->logo(public_path('\sptlogo-removebg-preview.png'))
+            // You can additionally save generated invoice to configured disk
+            ->save('public');
+
+        $link = $invoice->url();
+        // Then send email to party with link
+
+        // And return invoice itself to browser or have a different view
+        return $invoice->stream();
+    }
+
+
+    /**
+     * Display a listing of the resource. FOR MAIN INVOICE
      *
      * @return \Illuminate\Http\Response
      */

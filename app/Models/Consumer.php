@@ -15,7 +15,7 @@ class Consumer extends Model
      * @var array
      */
 
-    protected $table = "consumertable";
+    protected $table = 'consumertable';
     protected $primaryKey = 'id';
     protected $fillable = ['ConsumerName'];
 

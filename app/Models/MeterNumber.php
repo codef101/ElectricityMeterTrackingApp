@@ -16,7 +16,7 @@ class MeterNumber extends Model
      * @var array
      */
 
-    protected $table = "meternumbertable";
+    protected $table = 'meternumbertable';
     protected $primaryKey = 'MeterID';
     protected $fillable = ['MeterID','Date','BuildingName','ConsumerName','MeterNumber','TotalVolume','TotalUnits','PrincipleAmount','PrincipleAmountExclVat','VAT','ArrearsAmount','TarrifIndex','updated_at'];
 
