@@ -21,40 +21,46 @@ class InvoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function showSpecificInvoice(Request $MeterID)
+    public function mount($MeterID)
+    {
+        $this -> MeterID = $MeterID;
+    }
+
+    public function showSpecificInvoice($MeterID)
     {
         $SpecificRow = MeterNumber::find($MeterID);
+        $this -> selected_id = $MeterID;
 
         $client = new Party([
             'name'          => 'Electricity Suppliers',
-            'phone'         => 'x4x xxx xxxx',
+            'phone'         => 'xxx xxx xxxx',
             'custom_fields' => [
                 'Title' => 'Some info',
                 'Title' => 'Some info',
             ],
         ]);
-    
+
         $customer = new Party([
-            'name'          => $SpecificRow->ConsumerName.' End Consumer',
+            'name'          => 'Consumer: '.$SpecificRow->ConsumerName,
             'address'       => $SpecificRow->BuildingName,
             'title'          => 'some info',
             'custom_fields' => [
-                'title' => 'some info',
+                'Meter Number' => $SpecificRow->MeterNumber,
             ],
         ]);
-        
-        
+
+
         $estate = MeterNumber::all();
-        
-        $items []= 
+
+        $items []=
             (new InvoiceItem())
-                ->title('Consumer Name : ')
-                ->description('Meter Number : ')
-                ->pricePerUnit(656)
-                ->tax(56)
+                ->title('Meter Number : '.$SpecificRow->MeterNumber)
+                ->description('Used '.$SpecificRow->TotalUnits.' units')
+                ->pricePerUnit($SpecificRow->PrincipleAmountExclVat)
+                ->tax($SpecificRow->VAT)
                 ->quantity(1)
             ;
-        
+
 
         $notes = [
             'your multiline',
@@ -124,7 +130,7 @@ class InvoiceController extends Controller
 
         $Estates = MeterNumber::all();
         foreach($Estates as $estate){
-            $items []= 
+            $items []=
             (new InvoiceItem())
                 ->title('Consumer Name : '.$estate->ConsumerName)
                 ->description('Meter Number : '.$estate->MeterNumber.' |  Building Name : '.$estate->BuildingName)

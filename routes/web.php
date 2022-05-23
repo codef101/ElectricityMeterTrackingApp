@@ -35,5 +35,5 @@ Route::post('deleterow', [MeterController::class,'destroy'])->name('deleterow');
 /*Route::get('/create', [App\Http\Controllers\MeterController::class, 'create'])->name('create');
 Route::POST('/store', [App\Http\Controllers\MeterController::class, 'store'])->name('store');*/
 Route::get('/invoice',[InvoiceController::class,'show'])->name('invoice');
-Route::get('/SpecificInvoice',[InvoiceController::class,'showSpecificInvoice'])->name('SpecificInvoice');
+Route::get('/SpecificInvoice/{id}',[InvoiceController::class,'showSpecificInvoice']);
 
