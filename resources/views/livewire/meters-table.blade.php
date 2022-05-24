@@ -83,7 +83,7 @@
 
                             <button type="button" data-bs-toggle="modal" data-bs-target="#deleteStudentModal" wire:click="deleteStudent({{ $MeterNumber->MeterID }})" class="btn btn-danger"> Delete</button>
 
-                            <button type="button" onclick="window.location='{{ url("SpecificInvoice/3") }}'"  class="btn btn-secondary"> Download Invoice</button>
+                            <button type="button" onclick="window.location='{{ url("SpecificInvoice/ $MeterNumber->MeterID ") }}'"  class="btn btn-secondary"> Download Invoice</button>
 
                         </td>
 
