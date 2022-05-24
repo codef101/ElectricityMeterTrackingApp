@@ -164,6 +164,7 @@ class MetersTable extends Component
         //passing a parameter for the for table for loop to the view via the controller
         return view('livewire.meters-table',[
             'meterNumbers' =>  MeterNumber::search($this->search)
+                ->where('ConsumerName','LIKE','UNALLOCATED')
                 ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
                 ->simplePaginate($this->perPage),
         ]);

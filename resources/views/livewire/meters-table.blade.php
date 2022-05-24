@@ -1,6 +1,6 @@
 <div>
     <div>
-        <div class="w-full flex pb-10">
+        <!--<div class="w-full flex pb-10">
 
             <div class="w-3/6 mx-1">
                 <input wire:model.debounce.200ms="search" type="text" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"placeholder="Search by Date or Building Name or Consumer or Meter Number">
@@ -43,7 +43,7 @@
                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                 </div>
             </div>
-        </div>
+        </div> -->
         <table class="table-auto w-full mb-6">
             <thead>
                 <tr>
@@ -79,11 +79,11 @@
                         <td class="border px-4 py-2">{{ $MeterNumber->TarrifIndex }}</td>
 
                         <td class="border px-4 py-2">
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#updateStudentModal" wire:click="editStudent({{ $MeterNumber->MeterID }})" class="btn btn-primary">Edit</button>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#updateStudentModal" wire:click="editStudent({{ $MeterNumber->MeterID }})" class="btn btn-primary">Allocate Consumer</button>
 
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#deleteStudentModal" wire:click="deleteStudent({{ $MeterNumber->MeterID }})" class="btn btn-danger"> Delete</button>
+                            <!--<button type="button" data-bs-toggle="modal" data-bs-target="#deleteStudentModal" wire:click="deleteStudent({{ $MeterNumber->MeterID }})" class="btn btn-danger"> Delete</button>
 
-                            <button type="button" onclick="window.location='{{ url("SpecificInvoice/ $MeterNumber->MeterID ") }}'"  class="btn btn-secondary"> Download Invoice</button>
+                            <button type="button" onclick="window.location='{{ url("SpecificInvoice/ $MeterNumber->MeterID ") }}'"  class="btn btn-secondary"> Download Invoice</button> -->
 
                         </td>
 

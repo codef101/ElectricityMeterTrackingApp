@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Exceptions\NoTypeDetectedException;
 use Hash;
+use Carbon\Carbon;
 
 class ExcelImport implements ToModel,  WithStartRow, WithCustomCsvSettings
 {
@@ -33,7 +34,7 @@ class ExcelImport implements ToModel,  WithStartRow, WithCustomCsvSettings
     {
         return new MeterNumber([
             'Date'=> $row[0],
-            'BuildingName'=> $row[1], 
+            'BuildingName'=> $row[1],
             'MeterNumber'=> $row[2],
             'TotalVolume'=> $row[3],
             'TotalUnits'=> $row[4],
@@ -43,5 +44,17 @@ class ExcelImport implements ToModel,  WithStartRow, WithCustomCsvSettings
             'ArrearsAmount'=> $row[8],
             'TarrifIndex'=> $row[9],
         ]);
+    }
+
+    public function transformDate($value, $format = 'dd-mm-yyyy')
+    {
+        try
+        {
+            return \Carbon\Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value));
+        }
+        catch (\ErrorException $e)
+        {
+            return \Carbon\Carbon::createFromFormat($format, $value);
+        }
     }
 }
