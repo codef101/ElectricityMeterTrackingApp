@@ -28,7 +28,7 @@ class MetersTable extends Component
     //editing functionality ***************************************************
     //updating
     public $ConsumerID ,$Date,$consumerPointer, $BuildingName, $ConsumerName, $MeterNumber, $TotalVolume, $TotalUnits, $PrincipleAmount, $PrincipleAmountExclVat, $VAT, $ArrearsAmount, $TarrifIndex,$MeterID;
-    
+
     //*******************The dropdown */
     public function dropDown()
     {
@@ -37,7 +37,7 @@ class MetersTable extends Component
         //$consumers = DB::table('consumertable')
         //->select('ConsumerName')
         //->get();
-        
+
         return view('home',[
             'consumerPointer' => $consumers
         ]);
@@ -61,7 +61,7 @@ class MetersTable extends Component
         ];
     }
 
-    
+
     public function updated($fields)
     {
         $this->validateOnly($fields);
@@ -73,10 +73,9 @@ class MetersTable extends Component
         Consumer::create([
             'ConsumerName' => $this->ConsumerName,
         ]);
-        
+
         session()->flash('message','Added Successfully');
-        $this->resetInput();
-        $this->dispatchBrowserEvent('close-modal');
+        return redirect('/home');
     }
 
     public function editStudent(int $MeterID)
@@ -120,6 +119,7 @@ class MetersTable extends Component
         session()->flash('message',' Updated Successfully');
         $this->resetInput();
         $this->dispatchBrowserEvent('close-modal');
+        return redirect('/home');
     }
 
 
@@ -132,8 +132,9 @@ class MetersTable extends Component
     {
         MeterNumber::find($this->MeterID)->delete();
         session()->flash('message','Deleted Successfully');
+        return redirect('/home');
     }
-    
+
     public function closeModal()
     {
         $this->resetInput();
@@ -159,7 +160,7 @@ class MetersTable extends Component
     public function render()
     {
         $this->consumerPointer=Consumer::get();
-        
+
         //passing a parameter for the for table for loop to the view via the controller
         return view('livewire.meters-table',[
             'meterNumbers' =>  MeterNumber::search($this->search)

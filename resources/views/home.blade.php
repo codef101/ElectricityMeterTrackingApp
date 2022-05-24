@@ -16,18 +16,23 @@
             body {
                 font-family: 'Nunito';
             }
+            #main{
+                text-align: center;
+                width: 100%;
+                padding: 2%;
+            }
         </style>
 
         @livewireStyles
 </head>
-    <div class="container mx-auto">
+    <div  id="main">
                         <form action="{{ route('excel-import') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="file" name="file" class="form-control">
                             <br>
                             <button class="btn btn-success">Import User Data</button>
 
-                            
+
                         </form>
                         <br>
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#studentModal" >Add New Consumer</button>
@@ -38,9 +43,9 @@
         <h1 class="text-3xl text-center my-10">Meters Table</h1>
         <livewire:meters-table>
     </div>
-            
+
     @livewireScripts
-    
+
     @section('script')
     <script>
         window.addEventListener('close-modal', event => {
