@@ -27,49 +27,58 @@ class MeterController extends Controller
             }
 
         $meternumbers = MeterNumber::all();
-        
+
         return view ('home')->with('meternumbers', $meternumbers);
 
         $meternumbers = MeterNumber::get();
         return view('home',compact('home'));
 
-        
+
     }
     public $ConsumerID ,$consumers,$Date, $BuildingName, $ConsumerName, $MeterNumber, $TotalVolume, $TotalUnits, $PrincipleAmount, $PrincipleAmountExclVat, $VAT, $ArrearsAmount, $TarrifIndex,$MeterID;
-    
+
     //*******************The dropdown */
     public function dropDown()
     {
-        
+
     }
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function import(Request $request) 
+    public function import(Request $request)
     {
-        MeterNumber::truncate();
-        Excel::import(new ExcelImport,request()->file('file'));
-        //MeterNumber::select("UPDATE meternumbertable SET ConsumerName = 'UNALLOCATED' WHERE ConsumerName = NULL;")
- 
+        //if import button is pressed when empty it needs to display a message and not truncate
+        if($request->hasFile('file'))
+        {
+
+            MeterNumber::truncate();
+            Excel::import(new ExcelImport,request()->file('file'));
+
             //replacing NULLS with UNALLOCATED
                     DB::table('meternumbertable')
-              ->whereNull('ConsumerName')
-              ->update(['ConsumerName' => "UNALLOCATED"]);
+                ->whereNull('ConsumerName')
+                ->update(['ConsumerName' => "UNALLOCATED"]);
 
-              //DELETE EMPTY ROWS
-        DB::table('meternumbertable')->where('BuildingName', '=', null)->delete();
+            //DELETE EMPTY ROWS
+            DB::table('meternumbertable')->where('BuildingName', '=', null)->delete();
 
-        return back()->with('status', 'The file has been imported');
+            return back()->with('status', 'The file has been imported');
+        }
+        else
+        {
+            return back();
+        }
+
     }
 
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function export() 
+    public function export()
     {
         return Excel::download(new CsvExport, 'CSV.xlsx');
     }
-       
+
 
     /**
      * Show the form for creating a new resource.
@@ -81,11 +90,11 @@ class MeterController extends Controller
         $data = MeterNumber::select("MeterNumber")
                     ->where('MeterNumber', 'LIKE', '%'. $request->get('query'). '%')
                     ->get();
-     
+
         return response()->json($data);
     }
 
-    
+
 
     public function create()
     {
@@ -118,7 +127,7 @@ class MeterController extends Controller
 
     public function update(Request $request, MeterNumber $meternumber)
     {
-        
+
         //updating
         $request->validate([
             'Date' => 'required',
