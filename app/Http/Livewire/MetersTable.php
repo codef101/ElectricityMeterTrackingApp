@@ -72,10 +72,11 @@ class MetersTable extends Component
        //dd($request->all());
         Consumer::create([
             'ConsumerName' => $this->ConsumerName,
+            'MeterNumber' => 'No Meter Number Assigned Yet',
         ]);
         session()->flash('message','Added Successfully');
-        return redirect('/home');
-        $this->resetInputFields();
+        //return redirect('/home');
+        //$this->resetInputFields();
     }
 
     public function editStudent(int $MeterID)
@@ -121,9 +122,9 @@ class MetersTable extends Component
             ['ConsumerName' => $this->ConsumerName, 'MeterNumber' => $this->MeterNumber],
         ]);
 
-        session()->flash('message',' Updated Successfully');
-        $this->resetInput();
-        $this->dispatchBrowserEvent('close-modal');
+        //session()->flash('message',' Updated Successfully');
+        //$this->resetInput();
+        //$this->dispatchBrowserEvent('close-modal');
         return redirect('/home');
     }
 

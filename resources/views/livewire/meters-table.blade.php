@@ -78,7 +78,7 @@
                     <div class="form-group">
                         <label for="exampleFormControlInput1">Consumer Name</label>
                         <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter Name" wire:model="ConsumerName">
-                        @error('name') <span class="text-danger">{{ $message }}</span>@enderror
+                        @error('ConsumerName') <span class="text-danger">{{ $message }}</span>@enderror
                     </div>
                     <button wire:click.prevent="storeConsumer()" class="btn btn-success">Save</button>
                 </form>
@@ -100,7 +100,7 @@
                             <td>{{ $value->ConsumerName }}</td>
                             <td>{{ $value->MeterNumber }}</td>
                             <td>
-                            <button wire:click="update({{ $value->id }})" class="btn btn-primary btn-sm">Edit(Not working yet)</button>
+                            <button wire:click="update({{ $value->id }})" class="btn btn-primary btn-sm">Save Edit(Not working yet, i want a possible inline edit)</button>
                             <button wire:click="destroyConsumer({{ $value->id }})" class="btn btn-danger btn-sm">Delete</button>
                             </td>
                         </tr>
