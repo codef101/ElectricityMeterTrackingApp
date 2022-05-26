@@ -73,7 +73,6 @@ class MetersTable extends Component
         Consumer::create([
             'ConsumerName' => $this->ConsumerName,
         ]);
-
         session()->flash('message','Added Successfully');
         return redirect('/home');
     }

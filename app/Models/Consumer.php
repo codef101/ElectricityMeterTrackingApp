@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Consumer extends Model
 {
     use HasFactory;
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -17,7 +17,7 @@ class Consumer extends Model
 
     protected $table = 'consumertable';
     protected $primaryKey = 'id';
-    protected $fillable = ['ConsumerName'];
+    protected $fillable = ['ConsumerName','MeterNumber'];
 
     protected $guarded = [];
 }

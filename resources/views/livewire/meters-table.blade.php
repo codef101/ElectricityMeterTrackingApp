@@ -1,5 +1,85 @@
 <div>
     <div>
+        <button class="tablink" onclick="openPage('Home', this, 'grey')">Import CSV File</button>
+        <button class="tablink" onclick="openPage('News', this, 'grey')" id="defaultOpen">View Un-Allocated</button>
+        <button class="tablink" onclick="openPage('Contact', this, 'grey')">Consumer Control</button>
+        <!--<button class="tablink" onclick="openPage('About', this, 'grey')">About</button>-->
+
+        <div id="Home" class="tabcontent">
+            <form action="{{ route('excel-import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="file" name="file" class="form-control">
+                <br>
+                <button class="btn btn-success">Import User Data</button>
+            </form>
+        </div>
+
+        <div id="News" class="tabcontent">
+            <div style="margin-bottom: 15px">
+                <button type="button" class="btn btn-success" onclick="window.location='{{ url("invoice") }}'" target="_blank"  >View Current PDF Invoice</button>
+                <button type="button" class="btn btn-warning" onclick="window.location='{{ url("csv-export") }}'"  >Export CSV</button>
+            </div>
+
+            <table class="table-auto w-full mb-6">
+                <thead>
+                    <tr>
+                        <th class="px-4 py-2">Meter ID</th>
+                        <th class="px-4 py-2">Date</th>
+                        <th class="px-4 py-2">Building Name</th>
+                        <th class="px-4 py-2">Consumer Name</th>
+                        <th class="px-4 py-2">Meter Number</th>
+                        <th class="px-4 py-2">Total Volume</th>
+                        <th class="px-4 py-2">Total Units</th>
+                        <th class="px-4 py-2">Principle Amount</th>
+                        <th class="px-4 py-2">Amt Excl Vat</th>
+                        <th class="px-4 py-2">VAT</th>
+                        <th class="px-4 py-2">Arrears Amount</th>
+                        <th class="px-4 py-2">Tarriff Index</th>
+                        <th class="px-4 py-2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($meterNumbers as $MeterNumber)
+                        <tr>
+                            <td class="border px-4 py-2">{{ $MeterNumber->MeterID }}</td>
+                            <td class="border px-4 py-2">{{ $MeterNumber->Date }}</td>
+                            <td class="border px-4 py-2">{{ $MeterNumber->BuildingName }}</td>
+                            <td class="border px-4 py-2">{{ $MeterNumber->ConsumerName }}</td>
+                            <td class="border px-4 py-2">{{ $MeterNumber->MeterNumber }}</td>
+                            <td class="border px-4 py-2">{{ $MeterNumber->TotalVolume }}</td>
+                            <td class="border px-4 py-2">{{ $MeterNumber->TotalUnits }}</td>
+                            <td class="border px-4 py-2">{{ $MeterNumber->PrincipleAmount }}</td>
+                            <td class="border px-4 py-2">{{ $MeterNumber->PrincipleAmountExclVat }}</td>
+                            <td class="border px-4 py-2">{{ $MeterNumber->VAT }}</td>
+                            <td class="border px-4 py-2">{{ $MeterNumber->ArrearsAmount }}</td>
+                            <td class="border px-4 py-2">{{ $MeterNumber->TarrifIndex }}</td>
+
+                            <td class="border px-4 py-2">
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#updateStudentModal" wire:click="editStudent({{ $MeterNumber->MeterID }})" class="btn btn-primary">Allocate Consumer</button>
+
+                                <!--<button type="button" data-bs-toggle="modal" data-bs-target="#deleteStudentModal" wire:click="deleteStudent({{ $MeterNumber->MeterID }})" class="btn btn-danger"> Delete</button>
+
+                                <button type="button" onclick="window.location='{{ url("SpecificInvoice/ $MeterNumber->MeterID ") }}'"  class="btn btn-secondary"> Download Invoice</button> -->
+
+                            </td>
+
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <!-- pignation -->
+            {!! $meterNumbers->links() !!}
+        </div>
+
+        <div id="Contact" class="tabcontent">
+            <!--NEED TO HAVE A TABLE FOR CONSUMER CRUD (ADDING,DELETING,EDITING)-->
+
+        </div>
+
+        <div id="About" class="tabcontent">
+        <h3>About</h3>
+        <p>Who we are and what we do.</p>
+        </div>
         <!--<div class="w-full flex pb-10">
 
             <div class="w-3/6 mx-1">
@@ -44,55 +124,7 @@
                 </div>
             </div>
         </div> -->
-        <table class="table-auto w-full mb-6">
-            <thead>
-                <tr>
-                    <th class="px-4 py-2">Meter ID</th>
-                    <th class="px-4 py-2">Date</th>
-                    <th class="px-4 py-2">Building Name</th>
-                    <th class="px-4 py-2">Consumer Name</th>
-                    <th class="px-4 py-2">Meter Number</th>
-                    <th class="px-4 py-2">Total Volume</th>
-                    <th class="px-4 py-2">Total Units</th>
-                    <th class="px-4 py-2">Principle Amount</th>
-                    <th class="px-4 py-2">Amt Excl Vat</th>
-                    <th class="px-4 py-2">VAT</th>
-                    <th class="px-4 py-2">Arrears Amount</th>
-                    <th class="px-4 py-2">Tarriff Index</th>
-                    <th class="px-4 py-2">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($meterNumbers as $MeterNumber)
-                    <tr>
-                        <td class="border px-4 py-2">{{ $MeterNumber->MeterID }}</td>
-                        <td class="border px-4 py-2">{{ $MeterNumber->Date }}</td>
-                        <td class="border px-4 py-2">{{ $MeterNumber->BuildingName }}</td>
-                        <td class="border px-4 py-2">{{ $MeterNumber->ConsumerName }}</td>
-                        <td class="border px-4 py-2">{{ $MeterNumber->MeterNumber }}</td>
-                        <td class="border px-4 py-2">{{ $MeterNumber->TotalVolume }}</td>
-                        <td class="border px-4 py-2">{{ $MeterNumber->TotalUnits }}</td>
-                        <td class="border px-4 py-2">{{ $MeterNumber->PrincipleAmount }}</td>
-                        <td class="border px-4 py-2">{{ $MeterNumber->PrincipleAmountExclVat }}</td>
-                        <td class="border px-4 py-2">{{ $MeterNumber->VAT }}</td>
-                        <td class="border px-4 py-2">{{ $MeterNumber->ArrearsAmount }}</td>
-                        <td class="border px-4 py-2">{{ $MeterNumber->TarrifIndex }}</td>
 
-                        <td class="border px-4 py-2">
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#updateStudentModal" wire:click="editStudent({{ $MeterNumber->MeterID }})" class="btn btn-primary">Allocate Consumer</button>
-
-                            <!--<button type="button" data-bs-toggle="modal" data-bs-target="#deleteStudentModal" wire:click="deleteStudent({{ $MeterNumber->MeterID }})" class="btn btn-danger"> Delete</button>
-
-                            <button type="button" onclick="window.location='{{ url("SpecificInvoice/ $MeterNumber->MeterID ") }}'"  class="btn btn-secondary"> Download Invoice</button> -->
-
-                        </td>
-
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <!-- pignation -->
-        {!! $meterNumbers->links() !!}
     </div>
     <!-- Insert Modal -->
     <div wire:ignore.self class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="studentModalLabel"
