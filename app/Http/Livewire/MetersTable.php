@@ -117,9 +117,8 @@ class MetersTable extends Component
             'TarrifIndex' => $this->TarrifIndex
         ]);
 
-        DB::table('users')->insert([
-            ['email' => 'picard@example.com', 'votes' => 0],
-            ['email' => 'janeway@example.com', 'votes' => 0],
+        DB::table('consumertable')->insert([
+            ['ConsumerName' => $this->ConsumerName, 'MeterNumber' => $this->MeterNumber],
         ]);
 
         session()->flash('message',' Updated Successfully');
