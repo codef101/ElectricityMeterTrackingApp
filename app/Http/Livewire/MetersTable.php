@@ -67,7 +67,7 @@ class MetersTable extends Component
         $this->validateOnly($fields);
     }
 
-    public function saveStudent()
+    public function storeConsumer()
     {
        //dd($request->all());
         Consumer::create([
@@ -75,6 +75,7 @@ class MetersTable extends Component
         ]);
         session()->flash('message','Added Successfully');
         return redirect('/home');
+        $this->resetInputFields();
     }
 
     public function editStudent(int $MeterID)
@@ -115,6 +116,12 @@ class MetersTable extends Component
             'ArrearsAmount' => $this->ArrearsAmount,
             'TarrifIndex' => $this->TarrifIndex
         ]);
+
+        DB::table('users')->insert([
+            ['email' => 'picard@example.com', 'votes' => 0],
+            ['email' => 'janeway@example.com', 'votes' => 0],
+        ]);
+
         session()->flash('message',' Updated Successfully');
         $this->resetInput();
         $this->dispatchBrowserEvent('close-modal');
@@ -127,9 +134,9 @@ class MetersTable extends Component
         $this->MeterID = $MeterID;
     }
 
-    public function destroyStudent()
+    public function destroyConsumer($id)
     {
-        MeterNumber::find($this->MeterID)->delete();
+        Consumer::where('id',$id)->delete();
         session()->flash('message','Deleted Successfully');
         return redirect('/home');
     }
@@ -158,7 +165,11 @@ class MetersTable extends Component
 
     public function render()
     {
+        //USE THIS TO ITERATE THROUGH FOREACH *consumerPointer*
         $this->consumerPointer=Consumer::get();
+
+        //use this to render my consumer table for C.R.U.D
+        $this->consumers = Consumer::all();
 
         //passing a parameter for the for table for loop to the view via the controller
         return view('livewire.meters-table',[

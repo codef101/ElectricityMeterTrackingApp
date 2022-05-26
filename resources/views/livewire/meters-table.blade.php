@@ -62,7 +62,6 @@
                                 <button type="button" onclick="window.location='{{ url("SpecificInvoice/ $MeterNumber->MeterID ") }}'"  class="btn btn-secondary"> Download Invoice</button> -->
 
                             </td>
-
                         </tr>
                     @endforeach
                 </tbody>
@@ -74,6 +73,41 @@
         <div id="Contact" class="tabcontent">
             <!--NEED TO HAVE A TABLE FOR CONSUMER CRUD (ADDING,DELETING,EDITING)-->
 
+            <div>
+                <form>
+                    <div class="form-group">
+                        <label for="exampleFormControlInput1">Consumer Name</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter Name" wire:model="ConsumerName">
+                        @error('name') <span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <button wire:click.prevent="storeConsumer()" class="btn btn-success">Save</button>
+                </form>
+            </div>
+            <div>
+                <table class="table mt-8">
+                    <thead>
+                        <tr>
+
+                            <th>Consumer Name</th>
+                            <th>Meter Number</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($consumerPointer as $value)
+                        <tr>
+
+                            <td>{{ $value->ConsumerName }}</td>
+                            <td>{{ $value->MeterNumber }}</td>
+                            <td>
+                            <button wire:click="update({{ $value->id }})" class="btn btn-primary btn-sm">Edit(Not working yet)</button>
+                            <button wire:click="destroyConsumer({{ $value->id }})" class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div id="About" class="tabcontent">
