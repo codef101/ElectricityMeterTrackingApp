@@ -20,4 +20,9 @@ class Consumer extends Model
     protected $fillable = ['ConsumerName','MeterNumber'];
 
     protected $guarded = [];
+
+    public function meternumbers()
+    {
+        return $this->hasMany(Meternumbers::class);
+    }
 }

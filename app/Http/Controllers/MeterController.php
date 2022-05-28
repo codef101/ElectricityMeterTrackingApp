@@ -62,6 +62,30 @@ class MeterController extends Controller
             //DELETE EMPTY ROWS
             DB::table('meternumbertable')->where('BuildingName', '=', null)->delete();
 
+            //Auto filling consumers in meterstable
+            $meternumbers = MeterNumber::all();
+            $consumers = Consumer::all();
+            // loop through the input
+            foreach ($meternumbers as $row ) { //foreach (array_combine($meternumbers, $consumers) as $row => $crow) {
+                // Get consumer name
+                $consumer_name = DB::table('consumertable')
+                                    ->select('ConsumerName')
+                                    ->where('MeterNumber','=',$row->MeterNumber)
+                                    ->get();
+                // Get meternumber name
+                $meter_number = DB::table('consumertable')
+                                    ->select('MeterNumber')
+                                    ->where('MeterNumber','=',$row->MeterNumber)
+                                    ->get();
+
+                // update consumername column in meter table
+                //DB::raw('update meternumbertable set ConsumerName = '.$consumer_name );
+                //dd($row->ConsumerName);
+                DB::table('meternumbertable')
+                    ->where('MeterNumber','=', $row->MeterNumber)
+                    ->update(['ConsumerName' => $consumer_name]); //This here is returning an array?so it seems...
+            }
+
             return back()->with('status', 'The file has been imported');
         }
         else

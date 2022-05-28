@@ -32,4 +32,8 @@ class MeterNumber extends Model
                 ->orWhere('ConsumerName','like','%'.$search.'%')
                 ->orWhere('MeterNumber','like','%'.$search.'%');
     }
+    public function consumer()
+    {
+        return $this->belongsTo(Consumer::class);
+    }
 }
