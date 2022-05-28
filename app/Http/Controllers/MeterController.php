@@ -83,7 +83,7 @@ class MeterController extends Controller
                 //dd($row->ConsumerName);
                 DB::table('meternumbertable')
                     ->where('MeterNumber','=', $row->MeterNumber)
-                    ->update(['ConsumerName' => $consumer_name]); //This here is returning an array?so it seems...
+                    ->update(['ConsumerName' => 'UNALLOCATED']); //This here is returning an array?so it seems...best answer so far = $consumer_name
             }
 
             return back()->with('status', 'The file has been imported');

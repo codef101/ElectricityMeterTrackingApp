@@ -51,9 +51,15 @@
             display: none;
             padding: 100px 20px;
             height: 100%;
+            text-align: center;
+            margin: auto;
             }
 
-            #Home {background-color: rgb(255, 255, 255);}
+            #Home {
+                background-color: rgb(255, 255, 255);
+                text-align: center;
+                width: 60%;
+            }
             #News {background-color: rgb(255, 255, 255);}
             #Contact {background-color: rgb(255, 255, 255);}
             #About {background-color: rgb(255, 255, 255);}

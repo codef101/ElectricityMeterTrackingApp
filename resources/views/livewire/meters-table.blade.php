@@ -16,8 +16,8 @@
 
         <div id="News" class="tabcontent">
             <div style="margin-bottom: 15px">
-                <button type="button" class="btn btn-success" onclick="window.location='{{ url("invoice") }}'" target="_blank"  >View Current PDF Invoice</button>
-                <button type="button" class="btn btn-warning" onclick="window.location='{{ url("csv-export") }}'"  >Export CSV</button>
+                <button type="button" class="btn btn-success" onclick="window.location='{{ url("invoice") }}'" target="_blank"  >View Current Consumer Totals (PDF Format)</button>
+                <button type="button" class="btn btn-success" onclick="window.location='{{ url("csv-export") }}'"  >Export in CSV Format</button>
             </div>
 
             <table class="table-auto w-full mb-6">
@@ -76,15 +76,14 @@
             <div>
                 <form>
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Consumer Name</label>
-                        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter Name" wire:model="ConsumerName">
+                        <input style="width: 50%;margin: auto;" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter Consumer Name to Save" wire:model="ConsumerName">
                         @error('ConsumerName') <span class="text-danger">{{ $message }}</span>@enderror
                     </div>
-                    <button wire:click.prevent="storeConsumer()" class="btn btn-success">Save</button>
+                    <button style="margin-top: 10px" wire:click.prevent="storeConsumer()" class="btn btn-success">Save</button>
                 </form>
             </div>
             <div>
-                <table class="table mt-8">
+                <table class="table mt-8" style="width: 60%;margin: auto;">
                     <thead>
                         <tr>
 
@@ -100,7 +99,7 @@
                             <td>{{ $value->ConsumerName }}</td>
                             <td>{{ $value->MeterNumber }}</td>
                             <td>
-                            <button wire:click="update({{ $value->id }})" class="btn btn-primary btn-sm">Save Edit(Not working yet, i want a possible inline edit)</button>
+                            <button  wire:click="update({{ $value->id }})" class="btn btn-primary btn-sm">Save Edit(Not working yet, i want a possible inline edit)</button>
                             <button wire:click="destroyConsumer({{ $value->id }})" class="btn btn-danger btn-sm">Delete</button>
                             </td>
                         </tr>
