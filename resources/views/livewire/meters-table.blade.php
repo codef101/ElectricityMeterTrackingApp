@@ -83,7 +83,7 @@
                 </form>
             </div>
             <div>
-                <table class="table mt-8" style="width: 60%;margin: auto;">
+                <table class="table mt-8" style="width: 40%;margin: auto;margin-top:20px">
                     <thead>
                         <tr>
 
@@ -99,7 +99,7 @@
                             <td>{{ $value->ConsumerName }}</td>
                             <td>{{ $value->MeterNumber }}</td>
                             <td>
-                            <button  wire:click="update({{ $value->id }})" class="btn btn-primary btn-sm">Save Edit(Not working yet, i want a possible inline edit)</button>
+                            <!--<button  wire:click="update({{ $value->id }})" class="btn btn-primary btn-sm">Save Edit(Not working yet, i want a possible inline edit)</button>-->
                             <button wire:click="destroyConsumer({{ $value->id }})" class="btn btn-danger btn-sm">Delete</button>
                             </td>
                         </tr>
