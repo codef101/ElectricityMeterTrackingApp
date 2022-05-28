@@ -76,8 +76,8 @@
             <div>
                 <form>
                     <div class="form-group">
-                        <input style="width: 50%;margin: auto;" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter Consumer Name to Save" wire:model="ConsumerName">
-                        @error('ConsumerName') <span class="text-danger">{{ $message }}</span>@enderror
+                        <input style="width: 50%;margin: auto;" type="text" class="form-control"  placeholder="Enter Consumer Name to Save" wire:model="ConsumerName">
+
                     </div>
                     <button style="margin-top: 10px" wire:click.prevent="storeConsumer()" class="btn btn-success">Save</button>
                 </form>

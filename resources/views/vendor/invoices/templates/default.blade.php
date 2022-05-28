@@ -130,33 +130,35 @@
 
     <body>
         {{-- Header --}}
-        @if($invoice->logo)
-            <img src="{{ $invoice->getLogo() }}" alt="logo" height="100">
-        @endif
+        <div style="text-align: center">
+            @if($invoice->logo)
+                <img src="{{ $invoice->getLogo() }}" alt="logo" height="100" >
+            @endif
+        </div>
 
         <table class="table mt-5">
             <tbody>
                 <tr>
                     <td class="border-0 pl-0" width="70%">
                         <h4 class="text-uppercase">
-                            <strong>{{ $invoice->name }}</strong>
+                            <strong>Customer Totals</strong> <!--{{ $invoice->name }}-->
                         </h4>
                     </td>
                     <td class="border-0 pl-0">
                         @if($invoice->status)
                             <h4 class="text-uppercase cool-gray">
-                                <strong>{{ $invoice->status }}</strong>
+                                <strong>Something</strong><!--{{ $invoice->status }}-->
                             </h4>
                         @endif
-                        <p>{{ __('invoices::invoice.serial') }} <strong>{{ $invoice->getSerialNumber() }}</strong></p>
-                        <p>{{ __('invoices::invoice.date') }}: <strong>{{ $invoice->getDate() }}</strong></p>
+                        <!--<p>{{ __('invoices::invoice.serial') }} <strong>{{ $invoice->getSerialNumber() }}</strong></p>
+                        <p>{{ __('invoices::invoice.date') }}: <strong>{{ $invoice->getDate() }}</strong></p>-->
                     </td>
                 </tr>
             </tbody>
         </table>
 
         {{-- Seller - Buyer --}}
-        <table class="table">
+        <!--<table class="table">
             <thead>
                 <tr>
                     <th class="border-0 pl-0 party-header" width="48.5%">
@@ -247,7 +249,7 @@
                     </td>
                 </tr>
             </tbody>
-        </table>
+        </table> -->
 
         {{-- Table --}}
         <table class="table table-items">
@@ -357,19 +359,20 @@
                     </tr>
             </tbody>
         </table>
+        <!-- Notes section
+            @if($invoice->notes)
+                <p>
+                    {{ trans('invoices::invoice.notes') }}: {!! $invoice->notes !!}
+                </p>
+            @endif
 
-        @if($invoice->notes)
             <p>
-                {{ trans('invoices::invoice.notes') }}: {!! $invoice->notes !!}
+                {{ trans('invoices::invoice.amount_in_words') }}: {{ $invoice->getTotalAmountInWords() }}
             </p>
-        @endif
-
-        <p>
-            {{ trans('invoices::invoice.amount_in_words') }}: {{ $invoice->getTotalAmountInWords() }}
-        </p>
-        <p>
-            {{ trans('invoices::invoice.pay_until') }}: {{ $invoice->getPayUntilDate() }}
-        </p>
+            <p>
+                {{ trans('invoices::invoice.pay_until') }}: {{ $invoice->getPayUntilDate() }}
+            </p>
+        -->
 
         <script type="text/php">
             if (isset($pdf) && $PAGE_COUNT > 1) {
