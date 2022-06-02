@@ -17,18 +17,18 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    
+
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 
     <!-- style for the nav (come back and tweek it ,it messes wuth "show entries")-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    
 
 
-   
-    
-    
- 
+
+
+
+
+
 </head>
 <body>
     <div id="app" >
@@ -86,9 +86,9 @@
             </div>
         </nav>
 
-        <div  style="text-align:center; padding-top: 15px;">
+        <main  style="text-align:center; padding-top: 15px;">
             @yield('content')
-        </div>
+        </main>
     </div>
 </body>
 </html>

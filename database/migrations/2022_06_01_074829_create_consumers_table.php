@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('consumertable', function (Blueprint $table) {
-            $table->increments("id");
-            $table->string("ConsumerName");
+        Schema::create('consumers', function (Blueprint $table) {
+            $table->bigIncrements("id");
+            $table->string("ConsumerName")/*->nullable()*/;
+            $table->timestamps();
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('consumertable');
+        Schema::dropIfExists('consumers');
     }
 };

@@ -8,28 +8,28 @@ use LaravelDaily\Invoices\Classes\Buyer;
 use LaravelDaily\Invoices\Classes\NumberFormatter;
 use LaravelDaily\Invoices\Classes\Party;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
-use App\Models\MeterNumber;
+use App\Models\Consumption;
 use App\Models\Consumer;
 use DB;
 
 
 class InvoiceController extends Controller
 {
-    public $MeterID,$Date,$ConsumerName;
+    public $id,$Date,$ConsumerName;
     /**
      * Display a listing of the resource. FOR SPECIFIC INVOICES
      *
      * @return \Illuminate\Http\Response
      */
-    public function mount($MeterID)
+    public function mount($id)
     {
-        $this -> MeterID = $MeterID;
+        $this -> id = $id;
     }
 
-    public function showSpecificInvoice($MeterID)
+    public function showSpecificInvoice($id)
     {
-        $SpecificRow = MeterNumber::find($MeterID);
-        $this -> selected_id = $MeterID;
+        $SpecificRow = Consumption::find($id);
+        $this -> selected_id = $id;
 
         $client = new Party([
             'name'          => 'Electricity Suppliers',
@@ -128,7 +128,7 @@ class InvoiceController extends Controller
             ],
         ]);
 
-        $Estates = MeterNumber::all();
+        $Estates = Consumption::all();
         foreach($Estates as $estate){
             $items []=
             (new InvoiceItem())

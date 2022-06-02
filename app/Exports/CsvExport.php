@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\MeterNumber;
+use App\Models\Consumption;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -13,7 +13,7 @@ class CsvExport implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        return MeterNumber::select("Date", "BuildingName", "ConsumerName", "MeterNumber", "TotalVolume", "TotalUnits", "PrincipleAmount", "PrincipleAmountExclVat", "VAT", "ArrearsAmount", "TarrifIndex")->get();//all();
+        return Consumption::select("Date", "BuildingName", "ConsumerName", "MeterNumber", "TotalVolume", "TotalUnits", "PrincipleAmount", "PrincipleAmountExclVat", "VAT", "ArrearsAmount", "TarrifIndex")->get();//all();
     }
 
     /**

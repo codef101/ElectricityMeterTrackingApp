@@ -41,7 +41,7 @@
                 <tbody>
                     @foreach($meterNumbers as $MeterNumber)
                         <tr>
-                            <td class="border px-4 py-2">{{ $MeterNumber->MeterID }}</td>
+                            <td class="border px-4 py-2">{{ $MeterNumber->id }}</td>
                             <td class="border px-4 py-2">{{ $MeterNumber->Date }}</td>
                             <td class="border px-4 py-2">{{ $MeterNumber->BuildingName }}</td>
                             <td class="border px-4 py-2">{{ $MeterNumber->ConsumerName }}</td>
@@ -55,9 +55,9 @@
                             <td class="border px-4 py-2">{{ $MeterNumber->TarrifIndex }}</td>
 
                             <td class="border px-4 py-2">
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#updateStudentModal" wire:click="editStudent({{ $MeterNumber->MeterID }})" class="btn btn-primary">Allocate Consumer</button>
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#updateStudentModal" wire:click="editStudent({{ $MeterNumber->id }})" class="btn btn-primary">Allocate Consumer</button>
 
-                                <!--<button type="button" data-bs-toggle="modal" data-bs-target="#deleteStudentModal" wire:click="deleteStudent({{ $MeterNumber->MeterID }})" class="btn btn-danger"> Delete</button>
+                                <!--<button type="button" data-bs-toggle="modal" data-bs-target="#deleteStudentModal" wire:click="deleteStudent({{ $MeterNumber->id }})" class="btn btn-danger"> Delete</button>
 
                                 <button type="button" onclick="window.location='{{ url("SpecificInvoice/ $MeterNumber->MeterID ") }}'"  class="btn btn-secondary"> Download Invoice</button> -->
 
@@ -66,8 +66,7 @@
                     @endforeach
                 </tbody>
             </table>
-            <!-- pignation -->
-            {!! $meterNumbers->links() !!}
+
         </div>
 
         <div id="Contact" class="tabcontent">
@@ -78,8 +77,8 @@
                     <div class="form-group">
                         <input style="width: 50%;margin: auto;" type="text" class="form-control"  placeholder="Enter Consumer Name to Save" wire:model="ConsumerName">
 
+                        <button style="margin-top: 10px" wire:click.prevent="storeConsumer()" class="btn btn-success">Save</button>
                     </div>
-                    <button style="margin-top: 10px" wire:click.prevent="storeConsumer()" class="btn btn-success">Save</button>
                 </form>
             </div>
             <div>
@@ -88,7 +87,7 @@
                         <tr>
 
                             <th>Consumer Name</th>
-                            <th>Meter Number</th>
+                            <!--<th>Meter Number</th>-->
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -97,7 +96,7 @@
                         <tr>
 
                             <td>{{ $value->ConsumerName }}</td>
-                            <td>{{ $value->MeterNumber }}</td>
+                            <!--<td>{{ $value->MeterNumber }}</td>-->
                             <td>
                             <!--<button  wire:click="update({{ $value->id }})" class="btn btn-primary btn-sm">Save Edit(Not working yet, i want a possible inline edit)</button>-->
                             <button wire:click="destroyConsumer({{ $value->id }})" class="btn btn-danger btn-sm">Delete</button>
@@ -198,7 +197,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="updateStudentModalLabel">Edit Info</h5>
+                    <h5 class="modal-title" id="updateStudentModalLabel">Allocate Consumer</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" wire:click="closeModal"
                         aria-label="Close"></button>
                 </div>
@@ -222,7 +221,7 @@
                             <label>Assign a Consumer</label>
                             <select wire:model="ConsumerName" class="form-control">
                                 <option>---Choose a consumer from the drop down---</option>
-                                @foreach($consumerPointer as $item)
+                                @foreach($consumers as $item)
                                 <option>{{$item ->ConsumerName}}</option>
                                 @endforeach
                             </select>

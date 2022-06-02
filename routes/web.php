@@ -20,6 +20,7 @@ Route::get('/home', MetersTable::class, function () {
 });
 
 Auth::routes();
+Route::get('/test', [App\Http\Controllers\MeterController::class, 'test'])->name('test');
 
 Route::get('/home', [App\Http\Controllers\MeterController::class, 'index'])->name('home');
 Route::get('/autocomplete', [App\Http\Controllers\MeterController::class, 'autocomplete'])->name('autocomplete');
@@ -27,9 +28,11 @@ Route::post('/excel-import', [App\Http\Controllers\MeterController::class, 'impo
 Route::get('/csv-export', [App\Http\Controllers\MeterController::class, 'export'])->name('csv-export');
 
 //This route gives access to all functions within the controller class
-Route::resource('meternumbertable', App\Http\Controllers\MeterController::class);
+Route::resource('meters', App\Http\Controllers\MeterController::class);
 Route::resource('consumertable', App\Http\Controllers\MeterController::class);
-Route::resource('consumertable', App\HttpLivewire\MetersTable::class);
+Route::resource('consumptionstable', App\Http\Controllers\MeterController::class);
+Route::resource('consumptionstable', App\Http\Livewire\MetersTable::class);
+Route::resource('consumertable', App\Http\Livewire\MetersTable::class);
 
 Route::post('deleterow', [MeterController::class,'destroy'])->name('deleterow');
 /*Route::get('/create', [App\Http\Controllers\MeterController::class, 'create'])->name('create');

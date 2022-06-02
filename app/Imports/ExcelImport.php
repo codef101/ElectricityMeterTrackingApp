@@ -3,7 +3,7 @@
 namespace App\Imports;
 
 use Maatwebsite\Excel\Concerns\WithStartRow;
-use App\Models\MeterNumber;
+use App\Models\Consumption;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
@@ -32,7 +32,7 @@ class ExcelImport implements ToModel,  WithStartRow, WithCustomCsvSettings
     */
     public function model(array $row)
     {
-        return new MeterNumber([
+        return new Consumption([
             'Date'=> $row[0],
             'BuildingName'=> $row[1],
             'MeterNumber'=> $row[2],

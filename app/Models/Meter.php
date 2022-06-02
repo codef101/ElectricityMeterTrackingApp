@@ -5,23 +5,29 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Consumer extends Model
+class Meter extends Model
 {
     use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
 
-    protected $table = 'consumers';
+    protected $table = 'meters';
     protected $primaryKey = 'id';
-    protected $fillable = ['ConsumerName'];
+    protected $fillable = ['MeterNumber'];
 
     protected $guarded = [];
 
-    public function meter()
+    public function consumption()
     {
-        return $this->belongsTo(Meter::class,'meter_id');
+        return $this->hasOne(Meter::class);
+    }
+
+    public function consumer()
+    {
+        return $this->belongsTo(Consumer::class, 'consumer_id');
     }
 }

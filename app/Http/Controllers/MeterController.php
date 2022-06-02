@@ -6,36 +6,43 @@ use Illuminate\Http\Request;
 use App\Imports\ExcelImport;
 use App\Exports\CsvExport;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Models\MeterNumber;
 use App\Models\Consumer;
+use App\Models\Meter;
+use App\Models\Consumption;
 use DataTables;
 use DB;
 
 class MeterController extends Controller
 {
+
+    public function test()
+    {
+        $meters = Meter::with('consumptions')->get();
+        dd($meters);
+    }
     /**
     * @return \Illuminate\Support\Collection
     */
     public function index()
     {
         if(request()->ajax()) {
-            return datatables()->of(MeterNumber::select('*'))
+            return datatables()->of(Meter::select('*'))
             ->addColumn('action', 'action')
             ->rawColumns(['action'])
             ->addIndexColumn()
             ->make(true);
             }
 
-        $meternumbers = MeterNumber::all();
+        $meternumbers = Meter::all();
 
         return view ('home')->with('meternumbers', $meternumbers);
 
-        $meternumbers = MeterNumber::get();
+        $meternumbers = Meter::get();
         return view('home',compact('home'));
 
 
     }
-    public $ConsumerID ,$consumers,$Date, $BuildingName, $ConsumerName, $MeterNumber, $TotalVolume, $TotalUnits, $PrincipleAmount, $PrincipleAmountExclVat, $VAT, $ArrearsAmount, $TarrifIndex,$MeterID;
+    public $ConsumerID ,$consumers,$Date, $BuildingName, $ConsumerName, $Meter, $TotalVolume, $TotalUnits, $PrincipleAmount, $PrincipleAmountExclVat, $VAT, $ArrearsAmount, $TarrifIndex,$MeterID;
 
     //*******************The dropdown */
     public function dropDown()
@@ -51,40 +58,43 @@ class MeterController extends Controller
         if($request->hasFile('file'))
         {
 
-            MeterNumber::truncate();
+            Consumption::truncate();
             Excel::import(new ExcelImport,request()->file('file'));
 
             //replacing NULLS with UNALLOCATED
-                    DB::table('meternumbertable')
+                    DB::table('consumptions')
                 ->whereNull('ConsumerName')
                 ->update(['ConsumerName' => "UNALLOCATED"]);
 
             //DELETE EMPTY ROWS
-            DB::table('meternumbertable')->where('BuildingName', '=', null)->delete();
+            DB::table('consumptions')->where('BuildingName', '=', null)->delete();
 
             //Auto filling consumers in meterstable
-            $meternumbers = MeterNumber::all();
+            //$info = Consumer::find(36)->Meter;
+            //dd(7);
+            /*
+            $meternumbers = Meter::all();
             $consumers = Consumer::all();
             // loop through the input
             foreach ($meternumbers as $row ) { //foreach (array_combine($meternumbers, $consumers) as $row => $crow) {
                 // Get consumer name
                 $consumer_name = DB::table('consumertable')
                                     ->select('ConsumerName')
-                                    ->where('MeterNumber','=',$row->MeterNumber)
+                                    ->where('Meter','=',$row->Meter)
                                     ->get();
                 // Get meternumber name
                 $meter_number = DB::table('consumertable')
-                                    ->select('MeterNumber')
-                                    ->where('MeterNumber','=',$row->MeterNumber)
+                                    ->select('Meter')
+                                    ->where('Meter','=',$row->Meter)
                                     ->get();
 
                 // update consumername column in meter table
                 //DB::raw('update meternumbertable set ConsumerName = '.$consumer_name );
-                //dd($row->ConsumerName);
+                dd($consumer_name,'ConsumerName');
                 DB::table('meternumbertable')
-                    ->where('MeterNumber','=', $row->MeterNumber)
+                    ->where('Meter','=', $row->Meter)
                     ->update(['ConsumerName' => 'UNALLOCATED']); //This here is returning an array?so it seems...best answer so far = $consumer_name
-            }
+            }*/
 
             return back()->with('status', 'The file has been imported');
         }
@@ -111,8 +121,8 @@ class MeterController extends Controller
      */
     public function autocomplete(Request $request)
     {
-        $data = MeterNumber::select("MeterNumber")
-                    ->where('MeterNumber', 'LIKE', '%'. $request->get('query'). '%')
+        $data = Meter::select("Meter")
+                    ->where('Meter', 'LIKE', '%'. $request->get('query'). '%')
                     ->get();
 
         return response()->json($data);
@@ -144,20 +154,20 @@ class MeterController extends Controller
         //
     }
 
-    public function edit(MeterNumber $id)
+    public function edit(Meter $id)
     {
         return view('edit',compact('meternumbertable'));
     }
 
-    public function update(Request $request, MeterNumber $meternumber)
+    public function update(Request $request, Meter $meternumber)
     {
 
         //updating
         $request->validate([
             'Date' => 'required',
             'BuildingName' => 'required',
-            'Consumer' => 'required',
-            'MeterNumber' => 'required',
+            'ConsumerName' => 'required',
+            'Meter' => 'required',
             'TotalVolume' => 'required',
             'TotalUnits' => 'required',
             'PrincipleAmount' => 'required',
@@ -166,18 +176,18 @@ class MeterController extends Controller
             'ArrearsAmount' => 'required',
             'TarrifIndex' => 'required',
             ]);
-            $MeterNumber = MeterNumber::find($id);
-            $MeterNumber->BuildingName = $request->BuildingName;
-            $MeterNumber->Consumer = $request->Consumer;
-            $MeterNumber->MeterNumber = $request->MeterNumber;
-            $MeterNumber->TotalVolume = $request->TotalVolume;
-            $MeterNumber->TotalUnits = $request->TotalUnits;
-            $MeterNumber->PrincipleAmount = $request->PrincipleAmount;
-            $MeterNumber->PrincipleAmountExclVat = $request->PrincipleAmountExclVat;
-            $MeterNumber->VAT = $request->VAT;
-            $MeterNumber->ArrearsAmount = $request->ArrearsAmount;
-            $MeterNumber->TarrifIndex = $request->TarrifIndex;
-            $MeterNumber->save();
+            $Meter = Meter::find($id);
+            $Meter->BuildingName = $request->BuildingName;
+            $Meter->Consumer = $request->Consumer;
+            $Meter->Meter = $request->Meter;
+            $Meter->TotalVolume = $request->TotalVolume;
+            $Meter->TotalUnits = $request->TotalUnits;
+            $Meter->PrincipleAmount = $request->PrincipleAmount;
+            $Meter->PrincipleAmountExclVat = $request->PrincipleAmountExclVat;
+            $Meter->VAT = $request->VAT;
+            $Meter->ArrearsAmount = $request->ArrearsAmount;
+            $Meter->TarrifIndex = $request->TarrifIndex;
+            $Meter->save();
             return redirect()->route('home')
             ->with('success','Consumer info Has Been updated successfully');
     }
@@ -185,7 +195,7 @@ class MeterController extends Controller
     public function destroy($id)
     {
         //
-        $com = MeterNumber::where('id',$request->id)->delete();
+        $com = Meter::where('id',$request->id)->delete();
         return Response()->json($com);
     }
 }

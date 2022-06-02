@@ -2,7 +2,8 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\MeterNumber;
+use App\Models\Meter;
+use App\Models\Consumption;
 use App\Models\Consumer;
 use App\Http\Controllers\InvoiceController;
 use Livewire\Component;
@@ -27,10 +28,10 @@ class MetersTable extends Component
     //updating patch
     //editing functionality ***************************************************
     //updating
-    public $ConsumerID ,$Date,$consumerPointer, $BuildingName, $ConsumerName, $MeterNumber, $TotalVolume, $TotalUnits, $PrincipleAmount, $PrincipleAmountExclVat, $VAT, $ArrearsAmount, $TarrifIndex,$MeterID;
+    public $ConsumptionID, $ConsumerID ,$Date,$consumerPointer, $BuildingName, $ConsumerName, $MeterNumber, $TotalVolume, $TotalUnits, $PrincipleAmount, $PrincipleAmountExclVat, $VAT, $ArrearsAmount, $TarrifIndex,$MeterID;
 
     //*******************The dropdown */
-    public function dropDown()
+    /*public function dropDown()
     {
         $consumers = Consumer::all();
 
@@ -41,23 +42,23 @@ class MetersTable extends Component
         return view('home',[
             'consumerPointer' => $consumers
         ]);
-    }
+    }*/
     //*****************DropDown */
 
     protected function rules()
     {
         return [
-            'Date' => 'string',
-            'BuildingName' => 'string',
-            'ConsumerName' => 'string',
-            'MeterNumber' => 'string',
+            /*'Date' => 'string',
+            'BuildingName' => 'string',*/
+            'ConsumerName' => 'string|min:3'
+            /*'MeterNumber' => 'string',
             'TotalVolume' => 'string',
             'TotalUnits' => 'string',
             'PrincipleAmount' => 'string',
             'PrincipleAmountExclVat' => 'string',
             'VAT' => 'string',
             'ArrearsAmount' => 'string',
-            'TarrifIndex' => 'string',
+            'TarrifIndex' => 'string',*/
         ];
     }
 
@@ -70,57 +71,57 @@ class MetersTable extends Component
     public function storeConsumer()
     {
        //dd($request->all());
+       $this->validate();
         Consumer::create([
             'ConsumerName' => $this->ConsumerName,
-            'MeterNumber' => 'No Meter Number Assigned Yet',
+           // 'MeterNumber' => 'No Meter Number Assigned Yet',
         ]);
         session()->flash('message','Added Successfully');
-        //return redirect('/home');
-        //$this->resetInputFields();
+        return redirect('/home');
+        $this->resetInputFields();
     }
 
-    public function editStudent(int $MeterID)
+    public function editStudent(int $id)
     {
-        $student = MeterNumber::find($MeterID);
+        $student = Consumption::find($id);
         if($student){
-            $this->MeterID = $student->MeterID;
+            /*$this->id = $student->id;
             $this->Date = $student->Date;
-            $this->BuildingName = $student->BuildingName;
+            $this->BuildingName = $student->BuildingName;*/
             $this->ConsumerName = $student->ConsumerName;
-            $this->MeterNumber = $student->MeterNumber;
+            /*$this->MeterNumber = $student->MeterNumber;
             $this->TotalVolume = $student->TotalVolume;
             $this->TotalUnits = $student->TotalUnits;
             $this->PrincipleAmount = $student->PrincipleAmount;
             $this->PrincipleAmountExclVat = $student->PrincipleAmountExclVat;
             $this->VAT = $student->VAT;
             $this->ArrearsAmount = $student->ArrearsAmount;
-            $this->TarrifIndex = $student->TarrifIndex;
+            $this->TarrifIndex = $student->TarrifIndex;*/
         }else{
             return redirect()->to('/home');
         }
+
     }
 
     public function update()
     {
         //$validatedData = $this->validate();
+        //dd(7); WOW OKEY I SEE...
+        //INSERT THE CONSUMER NAME (IN ITS TABLE)
 
-        MeterNumber::where('MeterID',$this->MeterID)->update([
-            'Date' => $this->Date,
-            'BuildingName' => $this->BuildingName,
-            'ConsumerName' => $this->ConsumerName,
-            'MeterNumber' => $this->MeterNumber,
-            'TotalVolume' => $this->TotalVolume,
-            'TotalUnits' => $this->TotalUnits,
-            'PrincipleAmount' =>$this->PrincipleAmount,
-            'PrincipleAmountExclVat' => $this->PrincipleAmountExclVat,
-            'VAT' => $this->VAT,
-            'ArrearsAmount' => $this->ArrearsAmount,
-            'TarrifIndex' => $this->TarrifIndex
+        //THEN INSERT THE METER NUMBER WITH A REFERENCES CONSUMER
+
+        //THEN THE FK FROM METER TABLE WILL FILL THE CONSUMER NAME IN CONSUMPTION TABLE
+
+
+        //dd($this->id);
+        Consumption::where('id',1)->update([
+            'ConsumerName' => $this->ConsumerName
         ]);
 
-        DB::table('consumertable')->insert([
+        /*DB::table('consumertable')->insert([
             ['ConsumerName' => $this->ConsumerName, 'MeterNumber' => $this->MeterNumber],
-        ]);
+        ]);*/
 
         //session()->flash('message',' Updated Successfully');
         //$this->resetInput();
@@ -129,9 +130,9 @@ class MetersTable extends Component
     }
 
 
-    public function deleteStudent(int $MeterID)
+    public function deleteStudent(int $id)
     {
-        $this->MeterID = $MeterID;
+        $this->id = $id;
     }
 
     public function destroyConsumer($id)
@@ -173,10 +174,10 @@ class MetersTable extends Component
 
         //passing a parameter for the for table for loop to the view via the controller
         return view('livewire.meters-table',[
-            'meterNumbers' =>  MeterNumber::search($this->search)
-                ->where('ConsumerName','LIKE','UNALLOCATED')
-                ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-                ->simplePaginate($this->perPage),
+            'meterNumbers' =>  Consumption::all()
+                //->where('ConsumerName','LIKE','UNALLOCATED')
+                //->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+                //->simplePaginate($this->perPage),*/
         ]);
     }
 }
