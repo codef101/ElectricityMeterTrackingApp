@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Consumer;
+use App\Models\Meter;
 
 class MeterSeeder extends Seeder
 {
@@ -14,6 +16,11 @@ class MeterSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $consumer = Consumer::find(1);
+        $meter = new Meter();
+        $meter->MeterNumber = 1234567890;
+        $meter->consumer_id = $consumer->id;
+        $meter->save();
+
     }
 }

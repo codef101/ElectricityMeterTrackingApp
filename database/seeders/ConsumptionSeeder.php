@@ -14,6 +14,5 @@ class ConsumptionSeeder extends Seeder
      */
     public function run()
     {
-        //
     }
 }

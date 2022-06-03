@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Consumer;
 
 class ConsumerSeeder extends Seeder
 {
@@ -14,6 +15,8 @@ class ConsumerSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $consumer = new Consumer();
+        $consumer->ConsumerName = "Jane Doe";
+        $consumer->save();
     }
 }

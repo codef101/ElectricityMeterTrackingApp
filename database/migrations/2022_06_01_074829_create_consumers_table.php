@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('consumers', function (Blueprint $table) {
             $table->bigIncrements("id");
-            $table->string("ConsumerName")/*->nullable()*/;
+            $table->string("ConsumerName");
             $table->timestamps();
         });
     }

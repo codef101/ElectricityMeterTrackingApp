@@ -13,10 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        if(!Schema::hasTable('consumptions'))
+        Schema::create('consumptions', function (Blueprint $table)
         {
-            Schema::create('consumptions', function (Blueprint $table)
-            {
             $table->bigIncrements("id");
             $table->string("Date")->nullable();
             $table->string("BuildingName")->nullable();
@@ -30,15 +28,9 @@ return new class extends Migration
             $table->string("ArrearsAmount")->nullable();
             $table->string("TarrifIndex")->nullable();
             $table->timestamps();
-            });
+
         }
-
-
-        Schema::table('consumptions', function (Blueprint $table) {
-            $table->unsignedBigInteger('meter_id');//->default("UNALLOCATED")->change()
-            $table->foreign('meter_id')->references('id')->on('meters');
-
-        });
+    );
     }
 
     /**

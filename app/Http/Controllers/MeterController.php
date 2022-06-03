@@ -17,8 +17,19 @@ class MeterController extends Controller
 
     public function test()
     {
-        $meters = Meter::with('consumptions')->get();
-        dd($meters);
+        // Here you have consumers with meters
+        /*$consumers = Consumer::with('meter')->get();
+        dd($consumers);*/
+
+        //continue
+        $consumers = Consumer::with('meter')->get();
+
+        foreach ($consumers as $key => $consumer) {
+            $consumptions = Consumption::where('meter_id','=',$consumer->meter->id);
+            // there you go, you now have all consumptions from one user
+            //ill study it further..so i should be well off?
+        }
+
     }
     /**
     * @return \Illuminate\Support\Collection

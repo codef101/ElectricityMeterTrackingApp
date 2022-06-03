@@ -18,16 +18,13 @@ return new class extends Migration
            Schema::create('meters', function (Blueprint $table)
             {
                 $table->bigIncrements("id");
+                $table->unsignedBigInteger('consumer_id');
                 $table->string("MeterNumber");
                 $table->timestamps();
-            });
-        }
 
-        Schema::table('meters', function (Blueprint $table)
-            {
-                $table->unsignedBigInteger('consumer_id');
                 $table->foreign('consumer_id')->references('id')->on('consumers');
             });
+        }
     }
 
     /**
