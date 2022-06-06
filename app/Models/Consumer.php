@@ -22,6 +22,6 @@ class Consumer extends Model
 
     public function meter()
     {
-        return $this->belongsTo(Meter::class,'meter_id');
+        return $this->hasMany(Meter::class);
     }
 }

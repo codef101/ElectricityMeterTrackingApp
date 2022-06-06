@@ -17,18 +17,21 @@ class MeterController extends Controller
 
     public function test()
     {
+
+
         // Here you have consumers with meters
-        /*$consumers = Consumer::with('meter')->get();
-        dd($consumers);*/
+        $test = Consumption::with('consumers')->get();
+        //$test->consumer;
+        dd($test);
 
         //continue
-        $consumers = Consumer::with('meter')->get();
-
+        /*$consumers = Consumer::with('meter')->get();
+        dd($consumers);
         foreach ($consumers as $key => $consumer) {
             $consumptions = Consumption::where('meter_id','=',$consumer->meter->id);
             // there you go, you now have all consumptions from one user
             //ill study it further..so i should be well off?
-        }
+        }*/
 
     }
     /**
@@ -80,16 +83,18 @@ class MeterController extends Controller
             //DELETE EMPTY ROWS
             DB::table('consumptions')->where('BuildingName', '=', null)->delete();
 
+
             //Auto filling consumers in meterstable
             //$info = Consumer::find(36)->Meter;
             //dd(7);
-            /*
-            $meternumbers = Meter::all();
+
+            /*$meternumbers = Consumption::all();
             $consumers = Consumer::all();
             // loop through the input
-            foreach ($meternumbers as $row ) { //foreach (array_combine($meternumbers, $consumers) as $row => $crow) {
+            foreach ($meternumbers as $row ) {
                 // Get consumer name
-                $consumer_name = DB::table('consumertable')
+                $consumer_name = Consumption::with('meter');
+                                    /*DB::table('consumertable')
                                     ->select('ConsumerName')
                                     ->where('Meter','=',$row->Meter)
                                     ->get();
