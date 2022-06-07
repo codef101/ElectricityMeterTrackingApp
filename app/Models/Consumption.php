@@ -19,7 +19,8 @@ class Consumption extends Model
     protected $primaryKey = 'id';
     protected $fillable = ['Date','BuildingName','ConsumerName','MeterNumber','TotalVolume','TotalUnits','PrincipleAmount','PrincipleAmountExclVat','VAT','ArrearsAmount','TarrifIndex','updated_at'];
 
-    /*public function meter()
+
+    /*public function meter()//
     {
         return $this->hasOne(Meter::class);
     }*/
