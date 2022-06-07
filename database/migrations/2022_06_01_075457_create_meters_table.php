@@ -18,11 +18,9 @@ return new class extends Migration
            Schema::create('meters', function (Blueprint $table)
             {
                 $table->bigIncrements("id");
-                $table->unsignedBigInteger('consumer_id');
+                //$table->unsignedBigInteger('consumer_id');
                 $table->string("MeterNumber");
                 $table->timestamps();
-
-                $table->foreign('consumer_id')->references('id')->on('consumers');
             });
         }
     }

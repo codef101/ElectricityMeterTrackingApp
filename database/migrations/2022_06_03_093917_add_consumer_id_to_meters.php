@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        /*Schema::table('meters', function (Blueprint $table) {
-            $table->unsignedBigInteger('consumer_id')->after('consumer_id');
+        Schema::table('meters', function (Blueprint $table) {
+            $table->unsignedBigInteger('consumer_id')->after('id');
             $table->foreign('consumer_id')->references('id')->on('consumers');
-        });*/
+        });
     }
 };

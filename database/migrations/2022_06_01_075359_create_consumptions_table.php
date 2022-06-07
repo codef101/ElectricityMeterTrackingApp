@@ -13,8 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('consumptions', function (Blueprint $table)
+        if(!Schema::hasTable('consumptions'))
         {
+            Schema::create('consumptions', function (Blueprint $table)
+            {
             $table->bigIncrements("id");
             $table->string("Date")->nullable();
             $table->string("BuildingName")->nullable();
@@ -27,10 +29,11 @@ return new class extends Migration
             $table->string("VAT")->nullable();
             $table->string("ArrearsAmount")->nullable();
             $table->string("TarrifIndex")->nullable();
+            //$table->unsignedBigInteger('meter_id');
             $table->timestamps();
-
+            });
         }
-    );
+
     }
 
     /**

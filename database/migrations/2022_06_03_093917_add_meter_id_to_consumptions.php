@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('consumptions', function (Blueprint $table) {
-            $table->unsignedBigInteger('meter_id')->after('TarrifIndex')->nullable();
+            $table->unsignedBigInteger('meter_id')->after('id')->nullable();
             $table->foreign('meter_id')->references('id')->on('meters');
         });
     }

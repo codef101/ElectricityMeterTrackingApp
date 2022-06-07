@@ -13,11 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('consumers', function (Blueprint $table) {
-            $table->bigIncrements("id");
-            $table->string("ConsumerName");
-            $table->timestamps();
-        });
+        if(!Schema::hasTable('consumers'))
+        {
+            Schema::create('consumers', function (Blueprint $table) {
+                $table->bigIncrements("id");
+                $table->string("ConsumerName");
+                $table->timestamps();
+            });
+        }
+
     }
 
     /**

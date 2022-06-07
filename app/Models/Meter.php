@@ -23,11 +23,11 @@ class Meter extends Model
 
     public function consumption()
     {
-        return $this->belongsTo(Consumption::class);
+        return $this->hasMany(Consumption::class);
     }
 
-    public function consumer()
+    /*public function consumer()
     {
         return $this->belongsTo(Consumer::class);
-    }
+    }*/
 }

@@ -24,41 +24,13 @@ class MetersTable extends Component
     public $orderBy = 'MeterID';
     public $orderAsc = true;
 
-
-    //updating patch
-    //editing functionality ***************************************************
-    //updating
     public $ConsumptionID, $ConsumerID ,$Date,$consumerPointer, $BuildingName, $ConsumerName, $MeterNumber, $TotalVolume, $TotalUnits, $PrincipleAmount, $PrincipleAmountExclVat, $VAT, $ArrearsAmount, $TarrifIndex,$MeterID;
 
-    //*******************The dropdown */
-    /*public function dropDown()
-    {
-        $consumers = Consumer::all();
-
-        //$consumers = DB::table('consumertable')
-        //->select('ConsumerName')
-        //->get();
-
-        return view('home',[
-            'consumerPointer' => $consumers
-        ]);
-    }*/
-    //*****************DropDown */
 
     protected function rules()
     {
         return [
-            /*'Date' => 'string',
-            'BuildingName' => 'string',*/
-            'ConsumerName' => 'string|min:3'
-            /*'MeterNumber' => 'string',
-            'TotalVolume' => 'string',
-            'TotalUnits' => 'string',
-            'PrincipleAmount' => 'string',
-            'PrincipleAmountExclVat' => 'string',
-            'VAT' => 'string',
-            'ArrearsAmount' => 'string',
-            'TarrifIndex' => 'string',*/
+            'ConsumerName' => 'string',
         ];
     }
 
@@ -70,15 +42,15 @@ class MetersTable extends Component
 
     public function storeConsumer()
     {
-       //dd($request->all());
-       $this->validate();
-        Consumer::create([
-            'ConsumerName' => $this->ConsumerName,
-           // 'MeterNumber' => 'No Meter Number Assigned Yet',
+        $validatedData = $this->validate([
+            'ConsumerName' => 'required',
         ]);
+
+        Consumer::create($validatedData);
         session()->flash('message','Added Successfully');
+
+        //$this->resetInputFields();
         return redirect('/home');
-        $this->resetInputFields();
     }
 
     public function editStudent(int $id)

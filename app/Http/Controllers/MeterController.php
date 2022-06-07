@@ -20,7 +20,7 @@ class MeterController extends Controller
 
 
         // Here you have consumers with meters
-        $test = Consumption::with('consumers')->get();
+        $test = Consumption::find(1);
         //$test->consumer;
         dd($test);
 
