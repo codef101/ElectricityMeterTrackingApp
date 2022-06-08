@@ -12,10 +12,11 @@ use App\Models\Consumption;
 use App\Models\Consumer;
 use DB;
 
-
 class InvoiceController extends Controller
 {
-    public $id,$Date,$ConsumerName;
+    public $id;
+    public $Date;
+    public $ConsumerName;
     /**
      * Display a listing of the resource. FOR SPECIFIC INVOICES
      *
@@ -71,8 +72,6 @@ class InvoiceController extends Controller
 
         $invoice = Invoice::make('invoice')
             ->series('BIG')
-            // ability to include translated invoice status
-            // in case it was paid
             ->status(__('invoices::invoice.paid'))
             ->sequence(667)
             ->serialNumberFormat('{SEQUENCE}/{SERIES}')
@@ -129,7 +128,7 @@ class InvoiceController extends Controller
         ]);
 
         $Estates = Consumption::all();
-        foreach($Estates as $estate){
+        foreach ($Estates as $estate) {
             $items []=
             (new InvoiceItem())
                 ->title('Consumer Name : '.$estate->ConsumerName)

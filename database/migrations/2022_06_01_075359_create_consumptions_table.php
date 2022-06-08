@@ -20,8 +20,6 @@ return new class extends Migration
             $table->bigIncrements("id");
             $table->string("Date")->nullable();
             $table->string("BuildingName")->nullable();
-            $table->string("ConsumerName")->nullable();
-            $table->string("MeterNumber")->nullable();
             $table->string("TotalVolume")->nullable();
             $table->string("TotalUnits")->nullable();
             $table->string("PrincipleAmount")->nullable();

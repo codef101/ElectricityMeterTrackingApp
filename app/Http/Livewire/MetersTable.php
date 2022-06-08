@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Meter;
-use App\Models\Consumption;
-use App\Models\Consumer;
-use App\Http\Controllers\InvoiceController;
-use Livewire\Component;
-use Livewire\WithPagination;
 use DB;
+use App\Models\Meter;
+use Livewire\Component;
+use App\Models\Consumer;
+use App\Models\Consumption;
+use Illuminate\Http\Request;
+use Livewire\WithPagination;
+use App\Http\Controllers\InvoiceController;
 
 class MetersTable extends Component
 {
@@ -53,29 +54,7 @@ class MetersTable extends Component
         return redirect('/home');
     }
 
-    public function editStudent(int $id)
-    {
-        $student = Consumption::find($id);
-        if($student){
-            /*$this->id = $student->id;
-            $this->Date = $student->Date;
-            $this->BuildingName = $student->BuildingName;*/
-            $this->ConsumerName = $student->ConsumerName;
-            /*$this->MeterNumber = $student->MeterNumber;
-            $this->TotalVolume = $student->TotalVolume;
-            $this->TotalUnits = $student->TotalUnits;
-            $this->PrincipleAmount = $student->PrincipleAmount;
-            $this->PrincipleAmountExclVat = $student->PrincipleAmountExclVat;
-            $this->VAT = $student->VAT;
-            $this->ArrearsAmount = $student->ArrearsAmount;
-            $this->TarrifIndex = $student->TarrifIndex;*/
-        }else{
-            return redirect()->to('/home');
-        }
-
-    }
-
-    public function update()
+    public function update(Request $request)
     {
         //$validatedData = $this->validate();
         //dd(7); WOW OKEY I SEE...

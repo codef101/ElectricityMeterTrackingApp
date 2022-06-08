@@ -15,12 +15,8 @@ use App\Http\Livewire\MetersTable;
 |
 */
 
-Route::get('/home', MetersTable::class, function () {
-    return view('welcome');
-});
 
 Auth::routes();
-Route::get('/test', [App\Http\Controllers\MeterController::class, 'test'])->name('test');
 
 Route::get('/home', [App\Http\Controllers\MeterController::class, 'index'])->name('home');
 Route::get('/autocomplete', [App\Http\Controllers\MeterController::class, 'autocomplete'])->name('autocomplete');

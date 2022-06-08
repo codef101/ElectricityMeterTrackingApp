@@ -9,25 +9,15 @@ class Meter extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-
-    protected $table = 'meters';
-    protected $primaryKey = 'id';
     protected $fillable = ['MeterNumber'];
-
-    protected $guarded = [];
 
     public function consumption()
     {
-        return $this->hasMany(Consumption::class);
+        return $this->hasOne(Consumption::class);
     }
 
-    /*public function consumer()
+    public function consumer()
     {
         return $this->belongsTo(Consumer::class);
-    }*/
+    }
 }

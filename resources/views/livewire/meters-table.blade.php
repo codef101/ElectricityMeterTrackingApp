@@ -1,7 +1,8 @@
 <div>
     <div>
         <button class="tablink" onclick="openPage('Home', this, 'grey')">Import CSV File</button>
-        <button class="tablink" onclick="openPage('News', this, 'grey')" id="defaultOpen">View Un-Allocated</button>
+        <button class="tablink" onclick="openPage('News', this, 'grey')" id="defaultOpen">View
+            Un-Allocated</button>
         <button class="tablink" onclick="openPage('Contact', this, 'grey')">Consumer Control</button>
         <!--<button class="tablink" onclick="openPage('About', this, 'grey')">About</button>-->
 
@@ -16,8 +17,10 @@
 
         <div id="News" class="tabcontent">
             <div style="margin-bottom: 15px">
-                <button type="button" class="btn btn-success" onclick="window.location='{{ url("invoice") }}'" target="_blank"  >View Current Consumer Totals (PDF Format)</button>
-                <button type="button" class="btn btn-success" onclick="window.location='{{ url("csv-export") }}'"  >Export in CSV Format</button>
+                <button type="button" class="btn btn-success" onclick="window.location='{{ url('invoice') }}'"
+                    target="_blank">View Current Consumer Totals (PDF Format)</button>
+                <button type="button" class="btn btn-success"
+                    onclick="window.location='{{ url('csv-export') }}'">Export in CSV Format</button>
             </div>
 
             <table class="table-auto w-full mb-6">
@@ -39,13 +42,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($meterNumbers as $MeterNumber)
+                    @foreach ($meterNumbers as $MeterNumber)
                         <tr>
                             <td class="border px-4 py-2">{{ $MeterNumber->id }}</td>
                             <td class="border px-4 py-2">{{ $MeterNumber->Date }}</td>
                             <td class="border px-4 py-2">{{ $MeterNumber->BuildingName }}</td>
-                            <td class="border px-4 py-2">{{ $MeterNumber->ConsumerName }}</td>
-                            <td class="border px-4 py-2">{{ $MeterNumber->MeterNumber }}</td>
+                            <td class="border px-4 py-2">
+                                @if ($MeterNumber->ConsumerName == null)
+                                    UNALLOCATED
+                                @else
+                                    {{ var_dump($MeterNumber->ConsumerName) }}
+                                @endif
+                            </td>
+                            <td class="border px-4 py-2">{{ $MeterNumber->meter->MeterNumber }}</td>
                             <td class="border px-4 py-2">{{ $MeterNumber->TotalVolume }}</td>
                             <td class="border px-4 py-2">{{ $MeterNumber->TotalUnits }}</td>
                             <td class="border px-4 py-2">{{ $MeterNumber->PrincipleAmount }}</td>
@@ -55,7 +64,9 @@
                             <td class="border px-4 py-2">{{ $MeterNumber->TarrifIndex }}</td>
 
                             <td class="border px-4 py-2">
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#updateStudentModal" wire:click="editStudent({{ $MeterNumber->id }})" class="btn btn-primary">Allocate Consumer</button>
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#updateStudentModal"
+                                     class="btn btn-primary">Allocate
+                                    Consumer</button>
 
                                 <!--<button type="button" data-bs-toggle="modal" data-bs-target="#deleteStudentModal" wire:click="deleteStudent({{ $MeterNumber->id }})" class="btn btn-danger"> Delete</button>
 
@@ -63,7 +74,9 @@
 
                             </td>
                         </tr>
+
                     @endforeach
+
                 </tbody>
             </table>
 
@@ -75,9 +88,11 @@
             <div>
                 <form>
                     <div class="form-group">
-                        <input style="width: 50%;margin: auto;" type="text" class="form-control"  placeholder="Enter Consumer Name to Save" wire:model="ConsumerName">
+                        <input style="width: 50%;margin: auto;" type="text" class="form-control"
+                            placeholder="Enter Consumer Name to Save" wire:model="ConsumerName">
 
-                        <button style="margin-top: 10px" wire:click.prevent="storeConsumer()" class="btn btn-success">Save</button>
+                        <button style="margin-top: 10px" wire:click.prevent="storeConsumer()"
+                            class="btn btn-success">Save</button>
                     </div>
                 </form>
             </div>
@@ -92,16 +107,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($consumerPointer as $value)
-                        <tr>
+                        @foreach ($consumerPointer as $value)
+                            <tr>
 
-                            <td>{{ $value->ConsumerName }}</td>
-                            <!--<td>{{ $value->MeterNumber }}</td>-->
-                            <td>
-                            <!--<button  wire:click="update({{ $value->id }})" class="btn btn-primary btn-sm">Save Edit(Not working yet, i want a possible inline edit)</button>-->
-                            <button wire:click="destroyConsumer({{ $value->id }})" class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        </tr>
+                                <td>{{ $value->ConsumerName }}</td>
+                                <!--<td>{{ $value->MeterNumber }}</td>-->
+                                <td>
+                                    <!--<button  wire:click="update({{ $value->id }})" class="btn btn-primary btn-sm">Save Edit(Not working yet, i want a possible inline edit)</button>-->
+                                    <button wire:click="destroyConsumer({{ $value->id }})"
+                                        class="btn btn-danger btn-sm">Delete</button>
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -109,8 +125,8 @@
         </div>
 
         <div id="About" class="tabcontent">
-        <h3>About</h3>
-        <p>Who we are and what we do.</p>
+            <h3>About</h3>
+            <p>Who we are and what we do.</p>
         </div>
         <!--<div class="w-full flex pb-10">
 
@@ -169,7 +185,7 @@
                         wire:click="closeModal"></button>
                 </div>
 
-                <form wire:submit.prevent="saveStudent"  >
+                <form wire:submit.prevent="saveStudent">
                     <div class="modal-body">
 
                         <div class="mb-3">
@@ -192,8 +208,8 @@
     </div>
 
     <!-- Update Student Modal -->
-    <div wire:ignore.self class="modal fade" id="updateStudentModal" tabindex="-1" aria-labelledby="updateStudentModalLabel"
-        aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="updateStudentModal" tabindex="-1"
+        aria-labelledby="updateStudentModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -201,83 +217,25 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" wire:click="closeModal"
                         aria-label="Close"></button>
                 </div>
-
                 <form wire:submit.prevent="update">
                     <div class="modal-body">
-                        <!--
-                        <div class="mb-3">
-                            <label>Date</label>
-                            <input type="text" wire:model="Date" class="form-control">
-                            @error('name') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label>Building Name</label>
-                            <input type="text" wire:model="BuildingName" class="form-control">
-                            @error('email') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div> -->
-
-                        <!--DROP DOWN-->
                         <div class="mb-3">
                             <label>Assign a Consumer</label>
                             <select wire:model="ConsumerName" class="form-control">
                                 <option>---Choose a consumer from the drop down---</option>
-                                @foreach($consumers as $item)
-                                <option>{{$item ->ConsumerName}}</option>
+                                @foreach ($consumers as $item)
+                                    <option>{{ $item->ConsumerName }}</option>
                                 @endforeach
                             </select>
-                            <!--<input type="text" wire:model="ConsumerName" class="form-control">-->
-                            @error('course') <span class="text-danger">{{ $message }}</span> @enderror
+                            @error('course')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
-                        <!--
-                        <div class="mb-3">
-                            <label>Meter Number</label>
-                            <input type="text" wire:model="MeterNumber" class="form-control">
-                            @error('email') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label>Total Volume</label>
-                            <input type="text" wire:model="TotalVolume" class="form-control">
-                            @error('course') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label>Total Units</label>
-                            <input type="text" wire:model="TotalUnits" class="form-control">
-                            @error('email') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label>Principle Amount</label>
-                            <input type="text" wire:model="PrincipleAmount" class="form-control">
-                            @error('course') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label>PrincipleAmountExclVat</label>
-                            <input type="text" wire:model="PrincipleAmountExclVat" class="form-control">
-                            @error('email') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label>VAT</label>
-                            <input type="text" wire:model="VAT" class="form-control">
-                            @error('course') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label>Arrears Amount</label>
-                            <input type="text" wire:model="ArrearsAmount" class="form-control">
-                            @error('email') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label>Tarrif Index</label>
-                            <input type="text" wire:model="TarrifIndex" class="form-control">
-                            @error('course') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div> -->
-
-
-
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" wire:click="closeModal"
                             data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button wire.click="update" class="btn btn-primary">Update</button>
                     </div>
                 </form>
 
@@ -286,8 +244,8 @@
     </div>
 
     <!-- Delete Student Modal -->
-    <div wire:ignore.self class="modal fade" id="deleteStudentModal" tabindex="-1" aria-labelledby="deleteStudentModalLabel"
-        aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="deleteStudentModal" tabindex="-1"
+        aria-labelledby="deleteStudentModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
