@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use App\Models\Meter;
 use App\Models\Consumer;
+use Barryvdh\DomPDF\PDF;
 use App\Models\Consumption;
 use Illuminate\Http\Request;
 use LaravelDaily\Invoices\Invoice;
@@ -113,94 +114,42 @@ class InvoiceController extends Controller
      */
     public function all_invoices()
     {
-        $client = new Party([
-            'name'          => 'Electricity Suppliers',
-            'phone'         => 'xxx xxx xxxx',
-            'custom_fields' => [
-                'Title' => 'Some info',
-                'Title' => 'Some info',
-            ],
-        ]);
-
-        $customer = new Party([
-            'name'          => 'Estates',
-            'address'       => 'address',
-            'title'          => 'some info',
-            'custom_fields' => [
-                'title' => 'some info',
-            ],
-        ]);
-        // get consumers
         $consumers = Consumer::get();
+        $items = [];
+        foreach ($consumers as $consumer) {
+            //  Get meters and consumptions
+            $meters = Meter::where('consumer_id', '=', $consumer->id)
+                                ->Join('consumptions', 'consumptions.meter_id', '=', 'meters.id')->get();
 
-        // check if data exist
-        if (count($consumers) > 0) {
-            $items = [];
-            foreach ($consumers as $consumer) {
-                $consumer->total = 0;
-                array_push(
-                    $items,
-                    (new InvoiceItem())
-                        ->title('Consumer Name : '.$consumer->ConsumerName)
-                        ->pricePerUnit(0)
-                        ->tax(0)
-                        ->quantity(0)
-                );
-
-                //  Get meters and consumptions
-                $meters = Meter::where('consumer_id', '=', $consumer->id)
-                            ->join('consumptions', 'consumptions.meter_id', '=', 'meters.id')->get();
-                foreach ($meters as $meter) {
-                    array_push($items, (new InvoiceItem())
-                                ->pricePerUnit($meter->PrincipleAmountExclVat)
-                                ->tax($meter->VAT)
-                                ->quantity(1));
-                    $consumer->total += $meter->TotalVolume;
-                }
-                // array_push($items, (new InvoiceItem())
-                // ->title('Total'.$consumer->total));
+            $consumer->meters = $meters;
+            foreach ($meters as $meter) {
+                $consumer->total += $meter->TotalVolume;
             }
-
-            $notes = [
-                'your multiline',
-                'additional notes',
-                'in regards of payments or something else',
-            ];
-            $notes = implode("<br>", $notes);
-
-            $invoice = Invoice::make('invoice')
-                ->series('BIG')
-                // ability to include translated invoice status
-                // in case it was paid
-                ->status(__('invoices::invoice.paid'))
-                ->sequence(667)
-                ->serialNumberFormat('{SEQUENCE}/{SERIES}')
-                ->seller($client)
-                ->buyer($customer)
-                ->date(now()->subWeeks(3))
-                ->dateFormat('m/d/Y')
-                ->payUntilDays(14)
-                ->currencySymbol('R')
-                ->currencyCode('Rands')
-                ->currencyFormat('{SYMBOL}{VALUE}')
-                ->currencyThousandsSeparator('.')
-                ->currencyDecimalPoint(',')
-                ->filename($client->name . ' ' . $customer->name)
-
-                ->addItems($items)
-
-                ->notes($notes)
-                ->logo(public_path('\sptlogo-removebg-preview.png'))
-                // You can additionally save generated invoice to configured disk
-                ->save('public');
-
-            $link = $invoice->url();
-            // Then send email to party with link
-
-            // And return invoice itself to browser or have a different view
-            return $invoice->toHtml();
         }
-        return redirect('/home');
+        $unallocated = Meter::where('consumer_id', '=', null)
+                        ->Join('consumptions', 'consumptions.meter_id', '=', 'meters.id')->get();
+        return view('invoices', ['invoices'=>$consumers, 'unallocated' => $unallocated]);
+        return view('home');
+    }
+    public function export_invoices()
+    {
+        $consumers = Consumer::get();
+        $items = [];
+        foreach ($consumers as $consumer) {
+            //  Get meters and consumptions
+            $meters = Meter::where('consumer_id', '=', $consumer->id)
+                            ->Join('consumptions', 'consumptions.meter_id', '=', 'meters.id')->get();
+
+            $consumer->meters = $meters;
+            foreach ($meters as $meter) {
+                $consumer->total += $meter->TotalVolume;
+            }
+        }
+        $unallocated = Meter::where('consumer_id', '=', null)
+                    ->Join('consumptions', 'consumptions.meter_id', '=', 'meters.id')->get();
+        view()->share(['invoices'=>$consumers, 'unallocated' => $unallocated]);
+        $file = PDF::loadView('export-invoices', [$consumers, $unallocated]);
+        return $file->download('invoices.pdf');
     }
 
     /**

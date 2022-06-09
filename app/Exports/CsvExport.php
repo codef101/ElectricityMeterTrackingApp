@@ -3,8 +3,9 @@
 namespace App\Exports;
 
 use App\Models\Consumption;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromCollection;
 
 class CsvExport implements FromCollection, WithHeadings
 {
@@ -13,7 +14,8 @@ class CsvExport implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        return Consumption::select("Date", "BuildingName", "ConsumerName", "MeterNumber", "TotalVolume", "TotalUnits", "PrincipleAmount", "PrincipleAmountExclVat", "VAT", "ArrearsAmount", "TarrifIndex")->get();//all();
+        $data = DB::table('consumptions')->join('meters', 'meters.id','=', 'consumptions.meter_id')->join('consumers','consumers.id','=','meters.consumer_id')->get();
+        return $data;
     }
 
     /**
@@ -23,6 +25,6 @@ class CsvExport implements FromCollection, WithHeadings
      */
     public function headings(): array
     {
-        return ["Date", "Building Name","ConsumerName", "MeterNumber", "TotalVolume", "TotalUnits", "PrincipleAmount", "PrincipleAmountExclVat", "VAT", "ArrearsAmount", "TarrifIndex"];
+        return ["Date", "Building Name", "TotalVolume", "TotalUnits", "PrincipleAmount", "PrincipleAmountExclVat", "VAT", "ArrearsAmount", "TarrifIndex","MeterNumber","ConsumerName"];
     }
 }
