@@ -64,19 +64,21 @@
                             <td class="border px-4 py-2">{{ $consumption->TarrifIndex }}</td>
 
                             <td class="border d-flex">
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#updateStudentModal" data-meter-id="{{$consumption->meter->id}}"
-                                     class="btn btn-primary btn-sm">Allocate
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#updateStudentModal"
+                                    data-meter-id="{{ $consumption->meter->id }}"
+                                    class="btn btn-primary btn-sm">Allocate
                                     Consumer</button>
-                                    <a href="{{ url('customer-invoice/'.$consumption->consumerId)}}"
+                                @if (isset($consumption->consumerId))
+                                    <a href="{{ url('customer-invoice/' . $consumption->consumerId) }}"
                                         class="btn btn-secondary btn-sm">Get Invoice
                                     </a>
+                                @endif
                                 <!--<button type="button" data-bs-toggle="modal" data-bs-target="#deleteStudentModal" wire:click="deleteStudent({{ $consumption->id }})" class="btn btn-danger"> Delete</button>
 
                                 <button type="button" onclick="window.location='{{ url("SpecificInvoice/ $consumption->MeterID ") }}'"  class="btn btn-secondary"> Download Invoice</button> -->
 
                             </td>
                         </tr>
-
                     @endforeach
 
                 </tbody>
@@ -92,7 +94,7 @@
                 <form>
                     <div class="form-group">
                         <input style="width: 50%;margin: auto;" type="text" class="form-control"
-                            placeholder="Enter Consumer Name to Save" wire:model="ConsumerName">
+                            placeholder="Enter Consumer Name to Save" wire:model.lazy="ConsumerName">
 
                         <button style="margin-top: 10px" wire:click.prevent="storeConsumer()"
                             class="btn btn-success">Save</button>

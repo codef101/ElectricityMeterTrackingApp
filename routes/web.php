@@ -20,6 +20,6 @@ Route::resource('consumertable', App\Http\Livewire\MetersTable::class);
 
 Route::post('deleterow', [MeterController::class,'destroy'])->name('deleterow');
 Route::get('/invoice',[InvoiceController::class,'all_invoices'])->name('invoice');
-Route::get('/export-invoices',[InvoiceController::class,'all_invoices'])->name('invoice');
+Route::get('/export-invoices',[InvoiceController::class,'export_invoices'])->name('invoice');
 Route::get('/customer-invoice/{id}',[InvoiceController::class,'customer_invoice'])->name('customer_invoice');
 

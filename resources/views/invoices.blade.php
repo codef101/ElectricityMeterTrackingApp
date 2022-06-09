@@ -3,10 +3,10 @@
     <div style="margin-bottom: 15px">
         <button type="button" class="btn btn-success" onclick="window.location='{{ url('export-invoices') }}'" target="_blank">Export(PDF)</button>
     </div>
-
+    @foreach ($invoices as $invoice)
+    <h4>Consumer Name: {{ $invoice->ConsumerName }}</h4>
     <table class="table-auto w-full mb-6">
-        @foreach ($invoices as $invoice)
-            <h4>Consumer Name: {{ $invoice->ConsumerName }}</h4>
+
             <thead>
                 <tr>
                     <th class="px-4 py-2">Meter ID</th>
@@ -38,10 +38,12 @@
                         <td class="border px-4 py-2">{{ $meter->TarrifIndex }}</td>
                     </tr>
                 @endforeach
+                <tr><td class="border-bottom px-4 py-2"><strong>Totals</strong></td><td class="border-bottom px-4 py-2">{{$invoice->total}}</td></tr>
 
             </tbody>
-        @endforeach
     </table>
+    @endforeach
+
     <table class="table-auto w-full mt-6 py-4">
         <h4>Unallocated</h4>
         <thead>

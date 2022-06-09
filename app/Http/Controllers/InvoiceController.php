@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use App\Models\Meter;
 use App\Models\Consumer;
-use Barryvdh\DomPDF\PDF;
+use PDF;
 use App\Models\Consumption;
 use Illuminate\Http\Request;
 use LaravelDaily\Invoices\Invoice;
@@ -134,21 +134,23 @@ class InvoiceController extends Controller
     public function export_invoices()
     {
         $consumers = Consumer::get();
-        $items = [];
         foreach ($consumers as $consumer) {
             //  Get meters and consumptions
             $meters = Meter::where('consumer_id', '=', $consumer->id)
                             ->Join('consumptions', 'consumptions.meter_id', '=', 'meters.id')->get();
 
             $consumer->meters = $meters;
+            //  Calculate totals
             foreach ($meters as $meter) {
                 $consumer->total += $meter->TotalVolume;
             }
         }
         $unallocated = Meter::where('consumer_id', '=', null)
-                    ->Join('consumptions', 'consumptions.meter_id', '=', 'meters.id')->get();
-        view()->share(['invoices'=>$consumers, 'unallocated' => $unallocated]);
-        $file = PDF::loadView('export-invoices', [$consumers, $unallocated]);
+                        ->Join('consumptions', 'consumptions.meter_id', '=', 'meters.id')->get();
+
+        view()->share('invoices',$consumers);
+        view()->share('unallocated',$unallocated);
+        $file = PDF::loadView('export-invoices',compact($consumers,$unallocated));
         return $file->download('invoices.pdf');
     }
 

@@ -64,7 +64,6 @@ class MetersTable extends Component
         $validatedData = $this->validate([
             'ConsumerName' => 'required',
         ]);
-
         Consumer::create($validatedData);
         session()->flash('message', 'Added Successfully');
 
