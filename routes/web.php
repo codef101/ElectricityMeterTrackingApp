@@ -4,17 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MeterController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Livewire\MetersTable;
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 
 Auth::routes();
 
@@ -23,7 +12,6 @@ Route::get('/autocomplete', [App\Http\Controllers\MeterController::class, 'autoc
 Route::post('/excel-import', [App\Http\Controllers\MeterController::class, 'import'])->name('excel-import');
 Route::get('/csv-export', [App\Http\Controllers\MeterController::class, 'export'])->name('csv-export');
 
-//This route gives access to all functions within the controller class
 Route::resource('meters', App\Http\Controllers\MeterController::class);
 Route::resource('consumertable', App\Http\Controllers\MeterController::class);
 Route::resource('consumptionstable', App\Http\Controllers\MeterController::class);
@@ -31,8 +19,6 @@ Route::resource('consumptionstable', App\Http\Livewire\MetersTable::class);
 Route::resource('consumertable', App\Http\Livewire\MetersTable::class);
 
 Route::post('deleterow', [MeterController::class,'destroy'])->name('deleterow');
-/*Route::get('/create', [App\Http\Controllers\MeterController::class, 'create'])->name('create');
-Route::POST('/store', [App\Http\Controllers\MeterController::class, 'store'])->name('store');*/
-Route::get('/invoice',[InvoiceController::class,'show'])->name('invoice');
-Route::get('/SpecificInvoice/{id}',[InvoiceController::class,'showSpecificInvoice']);
+Route::get('/invoice',[InvoiceController::class,'all_invoices'])->name('invoice');
+Route::get('/customer-invoice/{id}',[InvoiceController::class,'customer_invoice'])->name('customer_invoice');
 

@@ -18,7 +18,7 @@
         <div id="News" class="tabcontent">
             <div style="margin-bottom: 15px">
                 <button type="button" class="btn btn-success" onclick="window.location='{{ url('invoice') }}'"
-                    target="_blank">View Current Consumer Totals (PDF Format)</button>
+                    target="_blank">View All Invoice Totals (PDF Format)</button>
                 <button type="button" class="btn btn-success"
                     onclick="window.location='{{ url('csv-export') }}'">Export in CSV Format</button>
             </div>
@@ -63,10 +63,13 @@
                             <td class="border px-4 py-2">{{ $consumption->ArrearsAmount }}</td>
                             <td class="border px-4 py-2">{{ $consumption->TarrifIndex }}</td>
 
-                            <td class="border px-4 py-2">
+                            <td class="border d-flex">
                                 <button type="button" data-bs-toggle="modal" data-bs-target="#updateStudentModal" data-meter-id="{{$consumption->meter->id}}"
-                                     class="btn btn-primary">Allocate
+                                     class="btn btn-primary btn-sm">Allocate
                                     Consumer</button>
+                                    <a href="{{ url('customer-invoice/'.$consumption->consumerId)}}"
+                                        class="btn btn-secondary btn-sm">Get Invoice
+                                    </a>
                                 <!--<button type="button" data-bs-toggle="modal" data-bs-target="#deleteStudentModal" wire:click="deleteStudent({{ $consumption->id }})" class="btn btn-danger"> Delete</button>
 
                                 <button type="button" onclick="window.location='{{ url("SpecificInvoice/ $consumption->MeterID ") }}'"  class="btn btn-secondary"> Download Invoice</button> -->
@@ -231,7 +234,7 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-                        <input wire:model="MeterID" type="text" id="meterId">
+                        <input wire:model="MeterID" type="hidden" id="meterId">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" wire:click="closeModal"

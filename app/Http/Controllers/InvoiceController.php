@@ -2,34 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use App\Models\Meter;
+use App\Models\Consumer;
+use App\Models\Consumption;
 use Illuminate\Http\Request;
 use LaravelDaily\Invoices\Invoice;
 use LaravelDaily\Invoices\Classes\Buyer;
-use LaravelDaily\Invoices\Classes\NumberFormatter;
 use LaravelDaily\Invoices\Classes\Party;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
-use App\Models\Consumption;
-use App\Models\Consumer;
-use DB;
+use LaravelDaily\Invoices\Classes\NumberFormatter;
 
 class InvoiceController extends Controller
 {
     public $id;
     public $Date;
     public $ConsumerName;
-    /**
-     * Display a listing of the resource. FOR SPECIFIC INVOICES
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function mount($id)
     {
         $this -> id = $id;
     }
-
-    public function showSpecificInvoice($id)
+    /**
+    * Display a listing of the resource. FOR SPECIFIC INVOICES
+    *
+    * @return \Illuminate\Http\Response
+    */
+    public function customer_invoice($id)
     {
-        $SpecificRow = Consumption::find($id);
+        $customer = Consumer::find($id);
+        $meters = Meter::where('consumer_id', '=', $customer->id)->join('consumptions', 'consumptions.meter_id', '=', 'meters.id')->get();
+        $items = [];
         $this -> selected_id = $id;
 
         $client = new Party([
@@ -42,25 +45,27 @@ class InvoiceController extends Controller
         ]);
 
         $customer = new Party([
-            'name'          => 'Consumer: '.$SpecificRow->ConsumerName,
-            'address'       => $SpecificRow->BuildingName,
+            'name'          => 'Consumer: '.$customer->ConsumerName,
+            'address'       => '',
             'title'          => 'some info',
             'custom_fields' => [
-                'Meter Number' => $SpecificRow->MeterNumber,
+                'Meter Number' => '',
             ],
         ]);
 
 
-        $estate = MeterNumber::all();
-
-        $items []=
-            (new InvoiceItem())
-                ->title('Meter Number : '.$SpecificRow->MeterNumber)
-                ->description('Used '.$SpecificRow->TotalUnits.' units')
-                ->pricePerUnit($SpecificRow->PrincipleAmountExclVat)
-                ->tax($SpecificRow->VAT)
+        foreach ($meters as $meter) {
+            array_push(
+                $items,
+                (new InvoiceItem())
+                ->title('Meter Number : '.$meter->MeterNumber)
+                ->description('Used '.$meter->TotalUnits.' units')
+                ->pricePerUnit($meter->PrincipleAmountExclVat)
+                ->tax($meter->VAT)
                 ->quantity(1)
-            ;
+            );
+        }
+
 
 
         $notes = [
@@ -101,13 +106,12 @@ class InvoiceController extends Controller
         return $invoice->stream();
     }
 
-
     /**
      * Display a listing of the resource. FOR MAIN INVOICE
      *
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function all_invoices()
     {
         $client = new Party([
             'name'          => 'Electricity Suppliers',
@@ -126,24 +130,35 @@ class InvoiceController extends Controller
                 'title' => 'some info',
             ],
         ]);
+        // get consumers
+        $consumers = Consumer::get();
 
-        $consumer = Consumer::with('meter')->get();
-        $consumptions = Consumption::where('meter_id','=',$consumer->meter->id)->get();
-        $consumer->total = 0;
-        foreach ($consumptions as $consumption) {
-            $consumer->total += $consumption->TotalVolume;
-            $consumer->consumption = $consumption;
-        }
-        if (count($consumer) > 0) {
-            foreach ($consumer as $consumer) {
-                $items []=
-                (new InvoiceItem())
-                    ->title('Consumer Name : '.$consumer->ConsumerName)
-                    ->description('Meter Number : '.$consumer->meter->MeterNumber.' |  Building Name : '.$consumer->consumption->BuildingName)
-                    ->pricePerUnit($consumer->PrincipleAmountExclVat)
-                    ->tax($consumer->VAT)
-                    ->quantity(1)
-                ;
+        // check if data exist
+        if (count($consumers) > 0) {
+            $items = [];
+            foreach ($consumers as $consumer) {
+                $consumer->total = 0;
+                array_push(
+                    $items,
+                    (new InvoiceItem())
+                        ->title('Consumer Name : '.$consumer->ConsumerName)
+                        ->pricePerUnit(0)
+                        ->tax(0)
+                        ->quantity(0)
+                );
+
+                //  Get meters and consumptions
+                $meters = Meter::where('consumer_id', '=', $consumer->id)
+                            ->join('consumptions', 'consumptions.meter_id', '=', 'meters.id')->get();
+                foreach ($meters as $meter) {
+                    array_push($items, (new InvoiceItem())
+                                ->pricePerUnit($meter->PrincipleAmountExclVat)
+                                ->tax($meter->VAT)
+                                ->quantity(1));
+                    $consumer->total += $meter->TotalVolume;
+                }
+                // array_push($items, (new InvoiceItem())
+                // ->title('Total'.$consumer->total));
             }
 
             $notes = [
@@ -183,7 +198,7 @@ class InvoiceController extends Controller
             // Then send email to party with link
 
             // And return invoice itself to browser or have a different view
-            return $invoice->stream();
+            return $invoice->toHtml();
         }
         return redirect('/home');
     }

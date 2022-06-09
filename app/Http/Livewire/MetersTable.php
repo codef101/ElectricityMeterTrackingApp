@@ -43,12 +43,13 @@ class MetersTable extends Component
     protected $listeners = [
         'getMeterIdInput'
    ];
-   //
-   public function getMeterIdInput($value)
-   {
-       if(!is_null($value))
-           $this->MeterID = $value;
-   }
+    //
+    public function getMeterIdInput($value)
+    {
+        if (!is_null($value)) {
+            $this->MeterID = $value;
+        }
+    }
     protected $rules =[
             'ConsumerName' => 'required|string',
             'MeterID' => 'required'
@@ -78,9 +79,9 @@ class MetersTable extends Component
         //dd(7); WOW OKEY I SEE...
         //INSERT THE CONSUMER NAME (IN ITS TABLE)
 
-        $consumer = Consumer::where('ConsumerName','=',$this->ConsumerName)->first();
+        $consumer = Consumer::where('ConsumerName', '=', $this->ConsumerName)->first();
         if ($consumer) {
-            $meter = Meter::where('id','=',$this->MeterID)->first();
+            $meter = Meter::where('id', '=', $this->MeterID)->first();
             $meter->consumer_id = $consumer->id;
             $meter->update();
         }
@@ -133,8 +134,11 @@ class MetersTable extends Component
         ->paginate(5);
 
         foreach ($consumptions as $consumption) {
-        $consumer = Consumer::where('id','=', $consumption->meter->consumer_id)->first();
-        $consumer != null ? $consumption->ConsumerName = $consumer->ConsumerName : false;
+            $consumer = Consumer::where('id', '=', $consumption->meter->consumer_id)->first();
+            if ($consumer != null) {
+                $consumption->ConsumerName = $consumer->ConsumerName;
+                $consumption->consumerId =  $consumption->meter->consumer_id;
+            }
         }
         //passing a parameter for the for table for loop to the view via the controller
         return view('livewire.meters-table', [
