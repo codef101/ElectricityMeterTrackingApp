@@ -22,20 +22,37 @@ class MetersTable extends Component
     public $search = '';
 
     //ordering the contents
-    public $orderBy = 'MeterID';
-    public $orderAsc = true;
+    // public $orderBy = 'MeterID';
+    // public $orderAsc = true;
+    // public $ConsumptionID;
+    // public $ConsumerID ;
+    // public $Date;
+    // public $consumerPointer;
+    // public $BuildingName;
+    // public $MeterNumber;
+    // public $TotalVolume;
+    // public $TotalUnits;
+    // public $PrincipleAmount;
+    // public $PrincipleAmountExclVat;
+    // public $VAT;
+    // public $ArrearsAmount;
+    // public $TarrifIndex;
+    public $MeterID;
+    public $ConsumerName;
 
-    public $ConsumptionID, $ConsumerID ,$Date,$consumerPointer, $BuildingName, $ConsumerName, $MeterNumber, $TotalVolume, $TotalUnits, $PrincipleAmount, $PrincipleAmountExclVat, $VAT, $ArrearsAmount, $TarrifIndex,$MeterID;
-
-
-    protected function rules()
-    {
-        return [
-            'ConsumerName' => 'string',
+    protected $listeners = [
+        'getMeterIdInput'
+   ];
+   //
+   public function getMeterIdInput($value)
+   {
+       if(!is_null($value))
+           $this->MeterID = $value;
+   }
+    protected $rules =[
+            'ConsumerName' => 'required|string',
+            'MeterID' => 'required'
         ];
-    }
-
-
     public function updated($fields)
     {
         $this->validateOnly($fields);
@@ -48,35 +65,25 @@ class MetersTable extends Component
         ]);
 
         Consumer::create($validatedData);
-        session()->flash('message','Added Successfully');
+        session()->flash('message', 'Added Successfully');
 
         //$this->resetInputFields();
         return redirect('/home');
     }
 
-    public function update(Request $request)
+    public function updateConsumer()
     {
+        $this->validate();
         //$validatedData = $this->validate();
         //dd(7); WOW OKEY I SEE...
         //INSERT THE CONSUMER NAME (IN ITS TABLE)
 
-        //THEN INSERT THE METER NUMBER WITH A REFERENCES CONSUMER
-
-        //THEN THE FK FROM METER TABLE WILL FILL THE CONSUMER NAME IN CONSUMPTION TABLE
-
-
-        //dd($this->id);
-        Consumption::where('id',1)->update([
-            'ConsumerName' => $this->ConsumerName
-        ]);
-
-        /*DB::table('consumertable')->insert([
-            ['ConsumerName' => $this->ConsumerName, 'MeterNumber' => $this->MeterNumber],
-        ]);*/
-
-        //session()->flash('message',' Updated Successfully');
-        //$this->resetInput();
-        //$this->dispatchBrowserEvent('close-modal');
+        $consumer = Consumer::where('ConsumerName','=',$this->ConsumerName)->first();
+        if ($consumer) {
+            $meter = Meter::where('id','=',$this->MeterID)->first();
+            $meter->consumer_id = $consumer->id;
+            $meter->update();
+        }
         return redirect('/home');
     }
 
@@ -88,8 +95,8 @@ class MetersTable extends Component
 
     public function destroyConsumer($id)
     {
-        Consumer::where('id',$id)->delete();
-        session()->flash('message','Deleted Successfully');
+        Consumer::where('id', $id)->delete();
+        session()->flash('message', 'Deleted Successfully');
         return redirect('/home');
     }
 
@@ -122,10 +129,16 @@ class MetersTable extends Component
 
         //use this to render my consumer table for C.R.U.D
         $this->consumers = Consumer::all();
+        $consumptions = Consumption::with('meter')
+        ->paginate(5);
 
+        foreach ($consumptions as $consumption) {
+        $consumer = Consumer::where('id','=', $consumption->meter->consumer_id)->first();
+        $consumer != null ? $consumption->ConsumerName = $consumer->ConsumerName : false;
+        }
         //passing a parameter for the for table for loop to the view via the controller
-        return view('livewire.meters-table',[
-            'meterNumbers' =>  Consumption::all()
+        return view('livewire.meters-table', [
+            'consumptions' =>  $consumptions
                 //->where('ConsumerName','LIKE','UNALLOCATED')
                 //->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
                 //->simplePaginate($this->perPage),*/

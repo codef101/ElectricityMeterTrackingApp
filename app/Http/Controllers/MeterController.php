@@ -53,7 +53,7 @@ class MeterController extends Controller
             $consumer = Consumer::where('id','=', $consumption->meter->consumer_id)->first();
             $consumer != null ? $consumption->ConsumerName = $consumer->ConsumerName : false;
         }
-        return view('home',['meternumbers'=> $consumptions]);
+        return view('home',['consumptions'=> $consumptions]);
     }
 
     //*******************The dropdown */

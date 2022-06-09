@@ -83,6 +83,7 @@
     <div>
 
         <livewire:meters-table>
+
             <script>
                 window.addEventListener('close-modal', event => {
 
@@ -114,6 +115,17 @@
 
                 // Get the element with id="defaultOpen" and click on it
                 document.getElementById("defaultOpen").click();
+
+                //triggered when modal is about to be shown
+                $('#updateStudentModal').on('show.bs.modal', function(e) {
+
+                //get data-id attribute of the clicked element
+                var meterId = $(e.relatedTarget).data('meter-id');
+
+                //populate the textbox
+                $(e.currentTarget).find('#meterId').val(meterId);
+                Livewire.emit('getMeterIdInput', meterId)
+                });
             </script>
     </div>
 

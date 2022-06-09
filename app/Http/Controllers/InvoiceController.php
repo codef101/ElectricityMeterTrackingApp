@@ -127,56 +127,65 @@ class InvoiceController extends Controller
             ],
         ]);
 
-        $Estates = Consumption::all();
-        foreach ($Estates as $estate) {
-            $items []=
-            (new InvoiceItem())
-                ->title('Consumer Name : '.$estate->ConsumerName)
-                ->description('Meter Number : '.$estate->MeterNumber.' |  Building Name : '.$estate->BuildingName)
-                ->pricePerUnit($estate->PrincipleAmountExclVat)
-                ->tax($estate->VAT)
-                ->quantity(1)
-            ;
+        $consumer = Consumer::with('meter')->get();
+        $consumptions = Consumption::where('meter_id','=',$consumer->meter->id)->get();
+        $consumer->total = 0;
+        foreach ($consumptions as $consumption) {
+            $consumer->total += $consumption->TotalVolume;
+            $consumer->consumption = $consumption;
         }
+        if (count($consumer) > 0) {
+            foreach ($consumer as $consumer) {
+                $items []=
+                (new InvoiceItem())
+                    ->title('Consumer Name : '.$consumer->ConsumerName)
+                    ->description('Meter Number : '.$consumer->meter->MeterNumber.' |  Building Name : '.$consumer->consumption->BuildingName)
+                    ->pricePerUnit($consumer->PrincipleAmountExclVat)
+                    ->tax($consumer->VAT)
+                    ->quantity(1)
+                ;
+            }
 
-        $notes = [
-            'your multiline',
-            'additional notes',
-            'in regards of payments or something else',
-        ];
-        $notes = implode("<br>", $notes);
+            $notes = [
+                'your multiline',
+                'additional notes',
+                'in regards of payments or something else',
+            ];
+            $notes = implode("<br>", $notes);
 
-        $invoice = Invoice::make('invoice')
-            ->series('BIG')
-            // ability to include translated invoice status
-            // in case it was paid
-            ->status(__('invoices::invoice.paid'))
-            ->sequence(667)
-            ->serialNumberFormat('{SEQUENCE}/{SERIES}')
-            ->seller($client)
-            ->buyer($customer)
-            ->date(now()->subWeeks(3))
-            ->dateFormat('m/d/Y')
-            ->payUntilDays(14)
-            ->currencySymbol('R')
-            ->currencyCode('Rands')
-            ->currencyFormat('{SYMBOL}{VALUE}')
-            ->currencyThousandsSeparator('.')
-            ->currencyDecimalPoint(',')
-            ->filename($client->name . ' ' . $customer->name)
+            $invoice = Invoice::make('invoice')
+                ->series('BIG')
+                // ability to include translated invoice status
+                // in case it was paid
+                ->status(__('invoices::invoice.paid'))
+                ->sequence(667)
+                ->serialNumberFormat('{SEQUENCE}/{SERIES}')
+                ->seller($client)
+                ->buyer($customer)
+                ->date(now()->subWeeks(3))
+                ->dateFormat('m/d/Y')
+                ->payUntilDays(14)
+                ->currencySymbol('R')
+                ->currencyCode('Rands')
+                ->currencyFormat('{SYMBOL}{VALUE}')
+                ->currencyThousandsSeparator('.')
+                ->currencyDecimalPoint(',')
+                ->filename($client->name . ' ' . $customer->name)
 
-            ->addItems($items)
+                ->addItems($items)
 
-            ->notes($notes)
-            ->logo(public_path('\sptlogo-removebg-preview.png'))
-            // You can additionally save generated invoice to configured disk
-            ->save('public');
+                ->notes($notes)
+                ->logo(public_path('\sptlogo-removebg-preview.png'))
+                // You can additionally save generated invoice to configured disk
+                ->save('public');
 
-        $link = $invoice->url();
-        // Then send email to party with link
+            $link = $invoice->url();
+            // Then send email to party with link
 
-        // And return invoice itself to browser or have a different view
-        return $invoice->stream();
+            // And return invoice itself to browser or have a different view
+            return $invoice->stream();
+        }
+        return redirect('/home');
     }
 
     /**

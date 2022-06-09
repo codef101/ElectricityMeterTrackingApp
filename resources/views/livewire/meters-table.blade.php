@@ -42,35 +42,34 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($meterNumbers as $MeterNumber)
+                    @foreach ($consumptions as $consumption)
                         <tr>
-                            <td class="border px-4 py-2">{{ $MeterNumber->id }}</td>
-                            <td class="border px-4 py-2">{{ $MeterNumber->Date }}</td>
-                            <td class="border px-4 py-2">{{ $MeterNumber->BuildingName }}</td>
+                            <td class="border px-4 py-2">{{ $consumption->id }}</td>
+                            <td class="border px-4 py-2">{{ $consumption->Date }}</td>
+                            <td class="border px-4 py-2">{{ $consumption->BuildingName }}</td>
                             <td class="border px-4 py-2">
-                                @if ($MeterNumber->ConsumerName == null)
+                                @if ($consumption->ConsumerName == null)
                                     UNALLOCATED
                                 @else
-                                    {{ var_dump($MeterNumber->ConsumerName) }}
+                                    {{ $consumption->ConsumerName }}
                                 @endif
                             </td>
-                            <td class="border px-4 py-2">{{ $MeterNumber->meter->MeterNumber }}</td>
-                            <td class="border px-4 py-2">{{ $MeterNumber->TotalVolume }}</td>
-                            <td class="border px-4 py-2">{{ $MeterNumber->TotalUnits }}</td>
-                            <td class="border px-4 py-2">{{ $MeterNumber->PrincipleAmount }}</td>
-                            <td class="border px-4 py-2">{{ $MeterNumber->PrincipleAmountExclVat }}</td>
-                            <td class="border px-4 py-2">{{ $MeterNumber->VAT }}</td>
-                            <td class="border px-4 py-2">{{ $MeterNumber->ArrearsAmount }}</td>
-                            <td class="border px-4 py-2">{{ $MeterNumber->TarrifIndex }}</td>
+                            <td class="border px-4 py-2">{{ $consumption->meter->MeterNumber }}</td>
+                            <td class="border px-4 py-2">{{ $consumption->TotalVolume }}</td>
+                            <td class="border px-4 py-2">{{ $consumption->TotalUnits }}</td>
+                            <td class="border px-4 py-2">{{ $consumption->PrincipleAmount }}</td>
+                            <td class="border px-4 py-2">{{ $consumption->PrincipleAmountExclVat }}</td>
+                            <td class="border px-4 py-2">{{ $consumption->VAT }}</td>
+                            <td class="border px-4 py-2">{{ $consumption->ArrearsAmount }}</td>
+                            <td class="border px-4 py-2">{{ $consumption->TarrifIndex }}</td>
 
                             <td class="border px-4 py-2">
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#updateStudentModal"
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#updateStudentModal" data-meter-id="{{$consumption->meter->id}}"
                                      class="btn btn-primary">Allocate
                                     Consumer</button>
+                                <!--<button type="button" data-bs-toggle="modal" data-bs-target="#deleteStudentModal" wire:click="deleteStudent({{ $consumption->id }})" class="btn btn-danger"> Delete</button>
 
-                                <!--<button type="button" data-bs-toggle="modal" data-bs-target="#deleteStudentModal" wire:click="deleteStudent({{ $MeterNumber->id }})" class="btn btn-danger"> Delete</button>
-
-                                <button type="button" onclick="window.location='{{ url("SpecificInvoice/ $MeterNumber->MeterID ") }}'"  class="btn btn-secondary"> Download Invoice</button> -->
+                                <button type="button" onclick="window.location='{{ url("SpecificInvoice/ $consumption->MeterID ") }}'"  class="btn btn-secondary"> Download Invoice</button> -->
 
                             </td>
                         </tr>
@@ -78,6 +77,7 @@
                     @endforeach
 
                 </tbody>
+
             </table>
 
         </div>
@@ -111,7 +111,7 @@
                             <tr>
 
                                 <td>{{ $value->ConsumerName }}</td>
-                                <!--<td>{{ $value->MeterNumber }}</td>-->
+                                <!--<td>{{ $value->consumption }}</td>-->
                                 <td>
                                     <!--<button  wire:click="update({{ $value->id }})" class="btn btn-primary btn-sm">Save Edit(Not working yet, i want a possible inline edit)</button>-->
                                     <button wire:click="destroyConsumer({{ $value->id }})"
@@ -138,7 +138,7 @@
                     <option value="Date">Date</option>
                     <option value="BuildingName">Building Name</option>
                     <option value="ConsumerName">Consumer</option>
-                    <option value="MeterNumber">Meter Number</option>
+                    <option value="consumption">Meter Number</option>
                     <option value="TotalUnits">Total Units</option>
                     <option value="PrincipleAmount">Principle Amount</option>
                     <option value="PrincipleAmountExclVat">Principle Amount Excl Vat</option>
@@ -217,7 +217,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" wire:click="closeModal"
                         aria-label="Close"></button>
                 </div>
-                <form wire:submit.prevent="update">
+                <form wire:submit.prevent="updateConsumer">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label>Assign a Consumer</label>
@@ -227,10 +227,11 @@
                                     <option>{{ $item->ConsumerName }}</option>
                                 @endforeach
                             </select>
-                            @error('course')
+                            @error('ConsumerName')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
+                        <input wire:model="MeterID" type="text" id="meterId">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" wire:click="closeModal"
